@@ -180,7 +180,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--pearl);ov
 <body>
 
 <!-- ═══ LOGIN OVERLAY ═══ -->
-<div class="login-overlay" id="loginOverlay">
+<div class="login-overlay hidden" id="loginOverlay">
   <div class="login-box" id="loginBox">
     <div class="login-logo">
       <div class="brand">SOLARIS</div>
@@ -202,7 +202,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--pearl);ov
 </div>
 
 <!-- ═══ HEADER ═══ -->
-<div class="header" id="appHeader" style="display:none">
+<div class="header" id="appHeader">
   <div class="logo">
     <div class="logo-mark">SA</div>
     <div class="logo-text"><span>Solaris</span> Argentina</div>
@@ -220,7 +220,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--pearl);ov
 </div>
 
 <!-- ═══ MAIN ═══ -->
-<div class="main" id="appMain" style="display:none">
+<div class="main" id="appMain">
   <div class="sidebar">
     <div class="sidebar-tabs">
       <button class="active" onclick="switchTab('buildings',this)">🏢 Edificios</button>
@@ -343,8 +343,9 @@ function doLogout(){
 
 // Check session on load
 (function(){
-  const saved=sessionStorage.getItem('sa_user');
-  if(saved&&USERS[saved]){currentUser=saved;showApp()}
+  // Auto-load without login
+  currentUser='guest';
+  showApp();
 })();
 
 // ═══════════════════════════════════════════
