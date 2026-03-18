@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solaris Argentina — Roof Scanner Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.1.1/dist/maplibre-gl.css">
+<script src="https://unpkg.com/maplibre-gl@4.1.1/dist/maplibre-gl.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--green:#0B3D2E;--green2:#0d4a37;--gold:#D4A843;--accent:#1A7A5A;--coral:#E85D3A;--bg:#0A0A0A;--card:#142822;--border:rgba(255,255,255,0.1);--pearl:#FEFDFB}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--pearl);overflow:hidden;height:100vh}
+
+/* ── Login Overlay ── */
+.login-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#060606 0%,var(--green) 50%,#060606 100%);z-index:10000;display:flex;align-items:center;justify-content:center;transition:opacity .5s}
+.login-overlay.hidden{opacity:0;pointer-events:none}
+.login-box{background:rgba(10,10,10,0.85);border:1px solid rgba(212,168,67,0.3);border-radius:16px;padding:48px 40px;width:380px;text-align:center;backdrop-filter:blur(20px)}
+.login-logo{margin-bottom:8px}
+.login-logo .brand{font-size:28px;font-weight:800;letter-spacing:2px;color:var(--gold)}
+.login-logo .sub{font-size:13px;color:rgba(254,253,251,0.5);letter-spacing:4px;text-transform:uppercase;margin-top:2px}
+.login-tagline{font-size:11px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin:16px 0 32px;opacity:0.7}
+.login-field{width:100%;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--pearl);padding:12px 16px;border-radius:8px;font-size:14px;font-family:inherit;outline:none;margin-bottom:12px;transition:border-color .2s}
+.login-field:focus{border-color:var(--gold)}
+.login-field::placeholder{color:rgba(255,255,255,0.3)}
+.login-btn{width:100%;background:var(--gold);color:var(--bg);border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px;transition:background .2s}
+.login-btn:hover{background:#c49a3a}
+.login-error{color:var(--coral);font-size:12px;margin-top:12px;min-height:18px}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.shake{animation:shake .4s ease}
+
+/* ── Header ── */
+.header{background:linear-gradient(135deg,var(--green) 0%,var(--green2) 100%);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);z-index:1000;position:relative}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:32px;height:32px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:var(--green)}
+.logo-text{font-size:16px;font-weight:700}.logo-text span{color:var(--gold)}
+.header-stats{display:flex;gap:20px}
+.hstat{text-align:center}
+.hstat-val{font-size:18px;font-weight:800;color:var(--gold)}
+.hstat-label{font-size:10px;opacity:0.6;text-transform:uppercase;letter-spacing:1px}
+.header-user{font-size:11px;opacity:0.5;display:flex;align-items:center;gap:8px}
+.logout-btn{background:none;border:1px solid var(--border);color:rgba(255,255,255,0.5);padding:3px 10px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit}
+.logout-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── Main Layout ── */
+.main{display:flex;height:calc(100vh - 52px)}
+
+/* ── Sidebar ── */
+.sidebar{width:380px;min-width:380px;background:var(--green);display:flex;flex-direction:column;border-right:1px solid var(--border);z-index:500}
+.sidebar-tabs{display:flex;border-bottom:1px solid var(--border)}
+.sidebar-tabs button{flex:1;padding:10px 8px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:12px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;transition:all .2s}
+.sidebar-tabs button.active{color:var(--gold);border-bottom-color:var(--gold)}
+.sidebar-tabs button:hover{color:#fff}
+
+/* Filters */
+.filters-bar{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.fbtn{background:var(--green2);border:1px solid var(--border);color:rgba(255,255,255,0.7);padding:4px 10px;border-radius:14px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s}
+.fbtn:hover{border-color:var(--gold);color:#fff}
+.fbtn.on{background:var(--gold);color:var(--green);border-color:var(--gold);font-weight:600}
+.search-row{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;gap:6px}
+.search-row input{flex:1;background:var(--green2);border:1px solid var(--border);color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;font-family:inherit;outline:none}
+.search-row input:focus{border-color:var(--gold)}
+.search-row select{background:var(--green2);border:1px solid var(--border);color:#fff;padding:6px;border-radius:6px;font-size:11px;font-family:inherit;outline:none}
+
+/* Building list */
+.panel-content{flex:1;overflow-y:auto;padding:0}
+.bldg-card{padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.bldg-card:hover{background:rgba(212,168,67,0.08)}
+.bldg-card.selected{background:rgba(212,168,67,0.15);border-left:3px solid var(--gold)}
+.bldg-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
+.bldg-name{font-size:13px;font-weight:600;flex:1;margin-right:8px}
+.bldg-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;flex-shrink:0}
+.badge-A{background:rgba(212,168,67,0.2);color:var(--gold)}
+.badge-B{background:rgba(46,216,154,0.2);color:#2ED89A}
+.badge-C{background:rgba(100,150,255,0.2);color:#6496FF}
+.badge-D{background:rgba(102,102,102,0.2);color:#888}
+.bldg-meta{font-size:11px;opacity:0.5;margin-bottom:4px}
+.bldg-stats{display:flex;gap:12px;font-size:11px}
+.bldg-stats span{color:var(--gold);font-weight:600}
+.bldg-actions{display:flex;gap:4px;margin-top:6px}
+.bldg-actions button{background:var(--green2);border:1px solid var(--border);color:#fff;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit}
+.bldg-actions button:hover{border-color:var(--gold);color:var(--gold)}
+.bldg-actions button.pip-on{background:var(--accent);border-color:var(--accent)}
+
+/* Compare bar */
+.compare-bar{padding:8px 12px;background:var(--green2);border-top:1px solid var(--gold);display:none;align-items:center;justify-content:space-between;font-size:12px}
+.compare-bar.show{display:flex}
+.compare-bar button{background:var(--gold);color:var(--green);border:none;padding:4px 12px;border-radius:4px;font-weight:600;cursor:pointer;font-family:inherit;font-size:11px}
+.compare-bar .clear-btn{background:var(--coral)}
+
+/* Analytics */
+.analytics-panel{padding:16px}
+.analytics-panel h3{color:var(--gold);font-size:14px;margin-bottom:12px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stat-card{background:var(--green2);border-radius:8px;padding:12px;text-align:center}
+.stat-card .sv{font-size:20px;font-weight:800;color:var(--gold)}
+.stat-card .sl{font-size:10px;opacity:0.5;text-transform:uppercase;margin-top:2px}
+.chart-section{margin-bottom:16px}
+.chart-section h4{font-size:12px;color:var(--gold);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:11px}
+.bar-label{width:90px;text-align:right;opacity:0.6;flex-shrink:0}
+.bar-track{flex:1;height:16px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:9px;font-weight:600;transition:width .5s}
+.bar-count{width:35px;font-size:11px;opacity:0.6}
+.top-list{list-style:none;margin-top:8px}
+.top-list li{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;border-bottom:1px solid var(--border)}
+.top-list .tl-rank{color:var(--gold);font-weight:700;width:20px}
+.top-list .tl-name{flex:1;margin:0 8px}
+.top-list .tl-val{font-weight:600;color:var(--accent)}
+
+/* Map */
+.map-wrap{flex:1;position:relative}
+#map{width:100%;height:100%}
+.map-ctrls{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:6px;z-index:10}
+.map-ctrls button{background:rgba(11,61,46,0.9);border:1px solid var(--border);color:#fff;width:34px;height:34px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.map-ctrls button:hover{border-color:var(--gold);color:var(--gold)}
+.map-ctrls button.active{background:var(--gold);color:var(--green);border-color:var(--gold)}
+.style-toggle{position:absolute;top:12px;left:12px;display:flex;gap:2px;z-index:10;background:rgba(11,61,46,0.9);border-radius:6px;padding:2px;border:1px solid var(--border)}
+.style-toggle button{background:none;border:none;color:rgba(255,255,255,0.6);padding:6px 12px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;transition:all .15s}
+.style-toggle button.active{background:var(--gold);color:var(--green)}
+.map-legend{position:absolute;bottom:12px;left:12px;background:rgba(11,61,46,0.92);border:1px solid var(--border);border-radius:8px;padding:10px 14px;z-index:10;font-size:11px}
+.map-legend h5{color:var(--gold);font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.lg-i{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.lg-d{width:10px;height:10px;border-radius:50%}
+
+/* Popup */
+.maplibregl-popup-content{background:var(--green)!important;color:var(--pearl)!important;border:1px solid var(--gold)!important;border-radius:10px!important;padding:16px!important;min-width:300px;max-width:360px;box-shadow:0 8px 30px rgba(0,0,0,0.5)!important}
+.maplibregl-popup-tip{border-top-color:var(--gold)!important}
+.maplibregl-popup-close-button{color:#fff!important;font-size:18px!important;right:8px!important;top:4px!important}
+.popup-title{font-size:15px;font-weight:700;margin-bottom:4px;padding-right:20px}
+.popup-sub{font-size:11px;opacity:0.5;margin-bottom:10px}
+.popup-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-bottom:10px}
+.popup-grid .pg-label{font-size:10px;opacity:0.5;text-transform:uppercase}
+.popup-grid .pg-val{font-size:13px;font-weight:600}
+.popup-btns{display:flex;gap:6px}
+.popup-btns a,.popup-btns button{flex:1;text-align:center;padding:8px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;cursor:pointer;font-family:inherit;border:none}
+.wa-btn{background:var(--accent);color:#fff}
+.wa-btn:hover{background:#15634a}
+.proposal-btn{background:var(--gold);color:var(--green)}
+.proposal-btn:hover{background:#c49a3a}
+.pip-toggle-btn{background:var(--green2);color:#fff;border:1px solid var(--border)!important}
+.pip-toggle-btn.active{background:var(--accent);border-color:var(--accent)!important}
+.note-area{width:100%;background:var(--green2);border:1px solid var(--border);color:#fff;padding:6px 8px;border-radius:4px;font-size:11px;font-family:inherit;resize:vertical;min-height:40px;margin-top:6px}
+.note-area:focus{border-color:var(--gold);outline:none}
+
+/* Compare overlay */
+.compare-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:2000;display:none;align-items:center;justify-content:center}
+.compare-overlay.show{display:flex}
+.compare-box{background:var(--green);border:2px solid var(--gold);border-radius:12px;padding:24px;max-width:900px;width:90%;max-height:80vh;overflow-y:auto}
+.compare-box h3{color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.compare-box .close-cmp{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+.compare-grid{display:grid;gap:16px}
+.compare-col{background:var(--green2);border-radius:8px;padding:14px}
+.compare-col h4{color:var(--gold);font-size:13px;margin-bottom:10px}
+.cmp-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border)}
+.cmp-label{opacity:0.5}
+.cmp-val{font-weight:600}
+
+/* Loading */
+.loading{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s}
+.loading.done{opacity:0;pointer-events:none}
+.spinner{width:40px;height:40px;border:3px solid var(--green2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{margin-top:12px;font-size:13px;opacity:0.6}
+
+/* Mobile */
+@media(max-width:768px){
+  .sidebar{width:100%;min-width:unset;position:fixed;bottom:0;left:0;right:0;height:50vh;z-index:500;border-right:none;border-top:2px solid var(--gold)}
+  .main{flex-direction:column}
+  .map-wrap{height:50vh}
+  .header-stats{display:none}
+  .login-box{width:90%;padding:32px 24px}
+}
+.panel-content::-webkit-scrollbar{width:6px}
+.panel-content::-webkit-scrollbar-track{background:var(--green)}
+.panel-content::-webkit-scrollbar-thumb{background:var(--green2);border-radius:3px}
+.panel-content::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN OVERLAY ═══ -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box" id="loginBox">
+    <div class="login-logo">
+      <div class="brand">SOLARIS</div>
+      <div class="sub">Argentina</div>
+    </div>
+    <div class="login-tagline">Roof Scanner Pro</div>
+    <input class="login-field" id="loginUser" type="text" placeholder="Usuario" autocomplete="username" autofocus>
+    <input class="login-field" id="loginPass" type="password" placeholder="Contraseña" autocomplete="current-password">
+    <button class="login-btn" id="loginBtn" onclick="attemptLogin()">Ingresar</button>
+    <div class="login-error" id="loginError"></div>
+    <div style="margin-top:24px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:3px;text-transform:uppercase">Energía Propia</div>
+  </div>
+</div>
+
+<!-- ═══ LOADING ═══ -->
+<div class="loading" id="loading" style="display:none">
+  <div class="spinner"></div>
+  <p>Cargando edificios...</p>
+</div>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header" id="appHeader" style="display:none">
+  <div class="logo">
+    <div class="logo-mark">SA</div>
+    <div class="logo-text"><span>Solaris</span> Argentina</div>
+  </div>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-val" id="h-buildings">0</div><div class="hstat-label">Edificios</div></div>
+    <div class="hstat"><div class="hstat-val" id="h-mwp">0</div><div class="hstat-label">MWp</div></div>
+    <div class="hstat"><div class="hstat-val" id="h-value">0</div><div class="hstat-label">USD M</div></div>
+    <div class="hstat"><div class="hstat-val" id="h-pipeline">0</div><div class="hstat-label">Pipeline</div></div>
+  </div>
+  <div class="header-user">
+    <span id="userDisplay"></span>
+    <button class="logout-btn" onclick="doLogout()">Salir</button>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main" id="appMain" style="display:none">
+  <div class="sidebar">
+    <div class="sidebar-tabs">
+      <button class="active" onclick="switchTab('buildings',this)">🏢 Edificios</button>
+      <button onclick="switchTab('analytics',this)">📊 Analíticas</button>
+    </div>
+
+    <div id="tab-buildings">
+      <div class="filters-bar">
+        <button class="fbtn on" data-pr="all" onclick="filterPriority('all',this)">Todos</button>
+        <button class="fbtn" data-pr="A" onclick="filterPriority('A',this)">🥇 A</button>
+        <button class="fbtn" data-pr="B" onclick="filterPriority('B',this)">🥈 B</button>
+        <button class="fbtn" data-pr="C" onclick="filterPriority('C',this)">🥉 C</button>
+        <button class="fbtn" data-pr="D" onclick="filterPriority('D',this)">D</button>
+        <span style="margin-left:8px;opacity:0.3">|</span>
+        <button class="fbtn" data-cat="industrial" onclick="filterCat('industrial',this)">🏭</button>
+        <button class="fbtn" data-cat="commercial" onclick="filterCat('commercial',this)">🏢</button>
+        <button class="fbtn" data-cat="warehouse" onclick="filterCat('warehouse',this)">📦</button>
+        <button class="fbtn" data-cat="retail" onclick="filterCat('retail',this)">🛒</button>
+        <button class="fbtn" data-cat="food_processing" onclick="filterCat('food_processing',this)">🍎</button>
+        <button class="fbtn" data-cat="hotel" onclick="filterCat('hotel',this)">🏨</button>
+        <button class="fbtn" data-cat="healthcare" onclick="filterCat('healthcare',this)">🏥</button>
+        <button class="fbtn" data-cat="education" onclick="filterCat('education',this)">🏫</button>
+        <span style="margin-left:4px;opacity:0.3">|</span>
+        <button class="fbtn" data-sz="500" onclick="filterSize(500,this)">500m²+</button>
+        <button class="fbtn" data-sz="1000" onclick="filterSize(1000,this)">1000m²+</button>
+        <button class="fbtn" data-pip="1" onclick="filterPipeline(this)">🟢 Pipeline</button>
+      </div>
+      <div class="search-row">
+        <input type="text" id="searchInput" placeholder="🔍 Buscar nombre, categoría...">
+        <select id="sortSelect" onchange="sortAndRender()">
+          <option value="kwp">kWp ↓</option>
+          <option value="area">Área ↓</option>
+          <option value="savings">Ahorro ↓</option>
+          <option value="payback">Retorno ↑</option>
+          <option value="name">Nombre A-Z</option>
+        </select>
+      </div>
+      <div class="panel-content" id="buildingList"></div>
+      <div class="compare-bar" id="compareBar">
+        <span>Comparar: <span id="cmpCount">0</span>/3</span>
+        <div style="display:flex;gap:4px">
+          <button onclick="showCompare()">Comparar</button>
+          <button class="clear-btn" onclick="clearCompare()">Limpiar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-analytics" style="display:none">
+      <div class="panel-content">
+        <div class="analytics-panel" id="analyticsContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="style-toggle">
+      <button id="btn-streets" class="active" onclick="setMapStyle('streets')">🗺️ Mapa</button>
+      <button id="btn-sat" onclick="setMapStyle('satellite')">🛰️ Satélite</button>
+    </div>
+    <div class="map-ctrls">
+      <button onclick="map.zoomIn()" title="Acercar">+</button>
+      <button onclick="map.zoomOut()" title="Alejar">−</button>
+      <button onclick="resetView()" title="Vista inicial">⌂</button>
+    </div>
+    <div class="map-legend">
+      <h5>Prioridad</h5>
+      <div class="lg-i"><div class="lg-d" style="background:#D4A843"></div> A — Alta (&gt;100 kWp)</div>
+      <div class="lg-i"><div class="lg-d" style="background:#2ED89A"></div> B — Media (50-100)</div>
+      <div class="lg-i"><div class="lg-d" style="background:#6496FF"></div> C — Baja (20-50)</div>
+      <div class="lg-i"><div class="lg-d" style="background:#666"></div> D — Pequeña (&lt;20)</div>
+      <div class="lg-i"><div class="lg-d" style="background:var(--accent);border:2px solid #2ED89A"></div> Pipeline</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPARE OVERLAY ═══ -->
+<div class="compare-overlay" id="compareOverlay">
+  <div class="compare-box">
+    <h3><span>⚖️ Comparación de Edificios</span><button class="close-cmp" onclick="closeCompare()">✕</button></h3>
+    <div class="compare-grid" id="compareGrid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════
+const USERS = {ruben:'Solaris2026!',kaniel:'Solaris2026!'};
+let currentUser = null;
+
+function attemptLogin(){
+  const u = document.getElementById('loginUser').value.trim().toLowerCase();
+  const p = document.getElementById('loginPass').value;
+  if(USERS[u] && USERS[u]===p){
+    currentUser = u;
+    sessionStorage.setItem('sa_user',u);
+    showApp();
+  } else {
+    document.getElementById('loginError').textContent='Usuario o contraseña incorrectos';
+    document.getElementById('loginBox').classList.add('shake');
+    setTimeout(()=>document.getElementById('loginBox').classList.remove('shake'),500);
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('loginOverlay').style.display!=='none'&&!document.getElementById('loginOverlay').classList.contains('hidden'))attemptLogin()});
+
+function showApp(){
+  document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('appHeader').style.display='';
+  document.getElementById('appMain').style.display='';
+  document.getElementById('loading').style.display='flex';
+  document.getElementById('userDisplay').textContent=currentUser;
+  setTimeout(initApp,100);
+}
+
+function doLogout(){
+  sessionStorage.removeItem('sa_user');
+  location.reload();
+}
+
+// Check session on load
+(function(){
+  const saved=sessionStorage.getItem('sa_user');
+  if(saved&&USERS[saved]){currentUser=saved;showApp()}
+})();
+
+// ═══════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════
+const COST_PER_KWP = 600;
+const IRRADIATION = 4.5;
+const PERF_RATIO = 0.80;
+const TARIFF = 0.06;
+const ANNUAL_KWH_PER_KWP = IRRADIATION * 365 * PERF_RATIO; // 1314
+const WA_NUMBER = '972503773225';
+
+const PRIORITY_COLORS = {A:'#D4A843',B:'#2ED89A',C:'#6496FF',D:'#666666'};
+const CAT_LABELS = {industrial:'🏭 Industrial',commercial:'🏢 Comercial',warehouse:'📦 Depósito',retail:'🛒 Retail',food_processing:'🍎 Agroindustria',hotel:'🏨 Hotel',healthcare:'🏥 Salud',education:'🏫 Educación',other:'📍 Otro'};
+const CAT_ICONS = {};
+Object.entries(CAT_LABELS).forEach(([k,v])=>CAT_ICONS[k]=v.split(' ')[0]);
+
+// ═══════════════════════════════════════════
+// BUILDING DATA — 500+ buildings across southern GBA (20km radius)
+// ═══════════════════════════════════════════
+const RAW = [];
+let _id=0;
+function B(name,lat,lon,cat,area){
+  _id++;
+  const kwp=Math.round(area*0.15);
+  const ann=Math.round(kwp*ANNUAL_KWH_PER_KWP);
+  const sav=Math.round(ann*TARIFF*100)/100;
+  const inv=kwp*COST_PER_KWP;
+  const pay=sav>0?Math.round(inv/sav*10)/10:99;
+  const pr=kwp>=100?'A':kwp>=50?'B':kwp>=20?'C':'D';
+  RAW.push({id:_id,n:name,la:lat,lo:lon,c:cat,a:area,kwp,ann,sav,inv,pay,pr,pip:0});
+}
+
+// ── INDUSTRIAL (120) ──
+B("Metalúrgica del Sur",-34.865,-58.489,"industrial",3200);
+B("Aceros Lomas SA",-34.872,-58.495,"industrial",4500);
+B("Plásticos Banfield",-34.843,-58.393,"industrial",2800);
+B("Textil Avellaneda",-34.662,-58.365,"industrial",3600);
+B("Industrias Químicas Lanús",-34.705,-58.395,"industrial",5200);
+B("Metalúrgica Lanús",-34.698,-58.388,"industrial",4100);
+B("Fundición del Plata",-34.718,-58.412,"industrial",3800);
+B("Fábrica de Pinturas Sur",-34.755,-58.445,"industrial",2200);
+B("Aceros Quilmes",-34.728,-58.262,"industrial",6800);
+B("Plásticos Quilmes SA",-34.742,-58.275,"industrial",3400);
+B("Industria Papelera del Sur",-34.762,-58.302,"industrial",5500);
+B("Cerámicas Bernal",-34.712,-58.282,"industrial",4200);
+B("Vidrios Berazategui",-34.765,-58.215,"industrial",7200);
+B("Siderúrgica Echeverría",-34.825,-58.465,"industrial",8500);
+B("Electromecánica San José",-34.838,-58.478,"industrial",2600);
+B("Fábrica de Cables Sur",-34.855,-58.501,"industrial",3100);
+B("Industrias Metalúrgicas Brown",-34.812,-58.392,"industrial",4800);
+B("Calzados La Unión",-34.795,-58.385,"industrial",2100);
+B("Autopartes Burzaco",-34.828,-58.398,"industrial",3500);
+B("Muebles del Sur SA",-34.845,-58.415,"industrial",2900);
+B("Fábrica de Envases Ezeiza",-34.865,-58.535,"industrial",6200);
+B("Plásticos Ezeiza",-34.878,-58.548,"industrial",4100);
+B("Laboratorio Industrial Sur",-34.892,-58.505,"industrial",1800);
+B("Metalúrgica Temperley",-34.772,-58.395,"industrial",3300);
+B("Industria del Caucho SA",-34.785,-58.378,"industrial",4600);
+B("Fábrica Nacional de Resortes",-34.738,-58.415,"industrial",2700);
+B("Industrias Eléctricas Wilde",-34.695,-58.328,"industrial",5100);
+B("Manufactura Textil Sarandí",-34.682,-58.342,"industrial",3900);
+B("Plásticos Inyectados Lanús",-34.712,-58.402,"industrial",2400);
+B("Tornería Industrial Adrogué",-34.798,-58.398,"industrial",1600);
+B("Estampados del Plata",-34.752,-58.355,"industrial",2800);
+B("Metalúrgica Florencio Varela",-34.812,-58.282,"industrial",5800);
+B("Fábrica de Herramientas Sur",-34.832,-58.305,"industrial",3200);
+B("Industria Maderera Almte. Brown",-34.808,-58.418,"industrial",4400);
+B("Química del Sur SA",-34.775,-58.442,"industrial",3700);
+B("Fábrica de Válvulas Lomas",-34.858,-58.482,"industrial",2500);
+B("Aluminios Quilmes",-34.735,-58.258,"industrial",4900);
+B("Industria Automotriz Avellaneda",-34.668,-58.358,"industrial",9200);
+B("Carpintería Industrial Banfield",-34.748,-58.398,"industrial",1900);
+B("Electrónica del Sur SA",-34.822,-58.435,"industrial",2300);
+B("Fábrica de Bombas Hidráulicas",-34.788,-58.468,"industrial",3100);
+B("Manufactura de Plásticos LP",-34.902,-58.415,"industrial",4200);
+B("Metalúrgica Esteban Echeverría",-34.835,-58.458,"industrial",3800);
+B("Industria del Vidrio Quilmes",-34.722,-58.248,"industrial",6100);
+B("Fábrica de Tornillos Nacional",-34.705,-58.372,"industrial",2200);
+B("Siderúrgica Avellaneda",-34.672,-58.352,"industrial",7500);
+B("Textil del Plata SA",-34.688,-58.338,"industrial",4300);
+B("Plásticos Reforzados Sur",-34.758,-58.312,"industrial",3500);
+B("Metalúrgica Precise",-34.815,-58.488,"industrial",2600);
+B("Fábrica de Maquinaria Agrícola",-34.882,-58.512,"industrial",5400);
+B("Industria del Cartón SA",-34.742,-58.382,"industrial",3900);
+B("Manufactura del Sur",-34.808,-58.445,"industrial",2700);
+B("Electromecánica Quilmes",-34.748,-58.268,"industrial",3200);
+B("Fábrica de Productos Químicos",-34.768,-58.428,"industrial",4100);
+B("Industria del Plástico Lanús",-34.715,-58.408,"industrial",2800);
+B("Metalúrgica General SA",-34.852,-58.472,"industrial",3600);
+B("Fábrica de Motores del Sur",-34.792,-58.358,"industrial",5800);
+B("Autopartes Quilmes SA",-34.732,-58.255,"industrial",4500);
+B("Industria Electromecánica",-34.848,-58.498,"industrial",3100);
+B("Laminados del Plata",-34.675,-58.345,"industrial",6400);
+B("Fábrica de Implementos",-34.895,-58.495,"industrial",3800);
+B("Manufactura Lanús SA",-34.708,-58.398,"industrial",2900);
+B("Industria de Alimentos Sur",-34.762,-58.452,"industrial",4700);
+B("Metalúrgica Remedios",-34.725,-58.405,"industrial",2100);
+B("Plásticos del Plata SA",-34.685,-58.362,"industrial",3400);
+B("Siderúrgica Brown SA",-34.818,-58.402,"industrial",7800);
+B("Fábrica de Caños del Sur",-34.842,-58.462,"industrial",4200);
+B("Industria del Acero Quilmes",-34.755,-58.278,"industrial",5600);
+B("Tornería del Plata SA",-34.698,-58.375,"industrial",1500);
+B("Fábrica de Equipos Industriales",-34.838,-58.505,"industrial",3300);
+B("Fundición Avellaneda",-34.678,-58.355,"industrial",4800);
+B("Metalúrgica Santa Catalina",-34.802,-58.372,"industrial",2400);
+B("Industria del Mueble Sur",-34.832,-58.425,"industrial",3700);
+B("Plásticos Gerli SA",-34.692,-58.382,"industrial",2600);
+B("Manufactura Echeverría",-34.828,-58.452,"industrial",4000);
+B("Fábrica de Perfiles de Acero",-34.712,-58.358,"industrial",5200);
+B("Industria Gráfica del Sur",-34.778,-58.402,"industrial",1800);
+B("Metalúrgica Monte Grande",-34.832,-58.468,"industrial",3500);
+B("Electrónicos Berazategui",-34.768,-58.218,"industrial",4300);
+B("Fábrica de Productos Plásticos",-34.702,-58.412,"industrial",2700);
+B("Industria Siderúrgica Sur",-34.812,-58.355,"industrial",6800);
+B("Metalúrgica La Plata Norte",-34.908,-58.402,"industrial",4100);
+B("Fábrica de Acoplados Sur",-34.875,-58.475,"industrial",5500);
+B("Plásticos Inyectados Quilmes",-34.745,-58.265,"industrial",3000);
+B("Metalúrgica Crucecita",-34.675,-58.362,"industrial",2200);
+B("Industria Alimenticia Lanús",-34.718,-58.395,"industrial",3800);
+B("Manufactura Tecnológica SA",-34.858,-58.508,"industrial",2500);
+B("Fábrica de Estructuras Metálicas",-34.795,-58.438,"industrial",4600);
+B("Industria del Aluminio Sur",-34.728,-58.288,"industrial",5100);
+B("Metalúrgica Solano",-34.782,-58.312,"industrial",3400);
+B("Fábrica de Calderas del Sur",-34.862,-58.515,"industrial",3900);
+B("Plásticos Temperley SA",-34.775,-58.388,"industrial",2300);
+B("Industria Mecánica Adrogué",-34.802,-58.405,"industrial",1700);
+B("Metalúrgica del Oeste",-34.835,-58.525,"industrial",4400);
+B("Fábrica de Filtros Industriales",-34.748,-58.418,"industrial",2000);
+B("Manufactura Berazategui",-34.772,-58.225,"industrial",3600);
+B("Industria de Pinturas Quilmes",-34.738,-58.272,"industrial",2800);
+B("Metalúrgica Dock Sud",-34.665,-58.342,"industrial",5900);
+B("Fábrica de Electrodos Sur",-34.855,-58.492,"industrial",1400);
+B("Industria del Packaging",-34.808,-58.382,"industrial",4200);
+B("Plásticos Industriales Ezeiza",-34.885,-58.542,"industrial",3700);
+B("Metalúrgica Claypole",-34.805,-58.338,"industrial",2600);
+B("Fábrica Integral del Sur",-34.818,-58.418,"industrial",5300);
+B("Manufactura de Cables SA",-34.698,-58.365,"industrial",3200);
+B("Industria Petroquímica Sur",-34.752,-58.345,"industrial",7100);
+B("Metalúrgica Villa Domínico",-34.688,-58.332,"industrial",4500);
+B("Fábrica de Tanques del Sur",-34.842,-58.485,"industrial",3000);
+B("Plásticos Hudson",-34.785,-58.245,"industrial",2400);
+B("Industria Naval Avellaneda",-34.658,-58.355,"industrial",9800);
+B("Metalúrgica Ranelagh",-34.795,-58.232,"industrial",3800);
+B("Fábrica de Griferías Sur",-34.722,-58.398,"industrial",1600);
+B("Manufactura Industrial Glew",-34.825,-58.375,"industrial",4000);
+B("Industria Metalúrgica Ezpeleta",-34.755,-58.232,"industrial",3100);
+B("Metalúrgica Sarandí SA",-34.685,-58.338,"industrial",4700);
+
+// ── WAREHOUSES (80) ──
+B("Distribuidora del Sur SA",-34.862,-58.492,"warehouse",2800);
+B("Depósito Central Lanús",-34.708,-58.388,"warehouse",3500);
+B("Logística Quilmes SA",-34.738,-58.262,"warehouse",4200);
+B("Depósito Frigorífico Avellaneda",-34.672,-58.352,"warehouse",2200);
+B("Distribuidora Banfield",-34.748,-58.395,"warehouse",1800);
+B("Centro Logístico Ezeiza",-34.872,-58.545,"warehouse",5000);
+B("Depósito Industrial Brown",-34.815,-58.398,"warehouse",3100);
+B("Almacén Mayorista Sur",-34.788,-58.445,"warehouse",2600);
+B("Logística del Plata SA",-34.695,-58.365,"warehouse",3800);
+B("Depósito Temperley",-34.778,-58.392,"warehouse",2100);
+B("Distribuidora Quilmes Centro",-34.725,-58.252,"warehouse",2900);
+B("Centro de Distribución Sur",-34.838,-58.475,"warehouse",4500);
+B("Depósito Comercial Lomas",-34.855,-58.488,"warehouse",2400);
+B("Logística Brown SA",-34.822,-58.412,"warehouse",3200);
+B("Almacén Industrial Bernal",-34.715,-58.278,"warehouse",1500);
+B("Depósito Burzaco SA",-34.832,-58.395,"warehouse",2700);
+B("Distribuidora Nacional Sur",-34.762,-58.355,"warehouse",3400);
+B("Centro Logístico Avellaneda",-34.665,-58.348,"warehouse",4800);
+B("Depósito Wilde",-34.698,-58.325,"warehouse",2000);
+B("Almacén Adrogué",-34.795,-58.395,"warehouse",1600);
+B("Logística Berazategui",-34.768,-58.218,"warehouse",3600);
+B("Depósito Monte Grande",-34.835,-58.472,"warehouse",2800);
+B("Distribuidora Echeverría SA",-34.828,-58.455,"warehouse",3100);
+B("Centro de Acopio Sur",-34.752,-58.428,"warehouse",2300);
+B("Depósito Industrial Lanús",-34.718,-58.405,"warehouse",1900);
+B("Logística Express Quilmes",-34.745,-58.268,"warehouse",2500);
+B("Almacén Florencio Varela",-34.808,-58.285,"warehouse",3800);
+B("Depósito Sarandí",-34.682,-58.342,"warehouse",2100);
+B("Distribuidora Gerli",-34.692,-58.378,"warehouse",1700);
+B("Centro Logístico Glew",-34.822,-58.368,"warehouse",4200);
+B("Depósito Frigorífico Quilmes",-34.732,-58.258,"warehouse",3000);
+B("Almacén del Plata SA",-34.705,-58.395,"warehouse",2400);
+B("Logística Sur Express",-34.848,-58.502,"warehouse",3500);
+B("Depósito Claypole",-34.802,-58.335,"warehouse",1800);
+B("Distribuidora Solano",-34.785,-58.308,"warehouse",2600);
+B("Centro de Distribución Ezeiza",-34.882,-58.538,"warehouse",4800);
+B("Depósito Remedios",-34.728,-58.402,"warehouse",1400);
+B("Almacén Industrial Quilmes",-34.742,-58.275,"warehouse",3200);
+B("Logística Almte. Brown",-34.812,-58.418,"warehouse",2700);
+B("Depósito Sur SA",-34.858,-58.498,"warehouse",2200);
+B("Distribuidora Dock Sud",-34.668,-58.345,"warehouse",3600);
+B("Centro Logístico Temperley",-34.775,-58.385,"warehouse",2000);
+B("Depósito Villa Domínico",-34.685,-58.335,"warehouse",2800);
+B("Almacén Comercial Lanús",-34.702,-58.398,"warehouse",1600);
+B("Logística Hudson",-34.782,-58.248,"warehouse",3300);
+B("Depósito Crucecita",-34.678,-58.358,"warehouse",1200);
+B("Distribuidora Monte Chingolo",-34.712,-58.358,"warehouse",2400);
+B("Centro de Acopio Brown",-34.818,-58.405,"warehouse",3000);
+B("Depósito Industrial Ezeiza",-34.875,-58.528,"warehouse",4500);
+B("Almacén Lomas Centro",-34.762,-58.445,"warehouse",1900);
+B("Logística Varela SA",-34.798,-58.288,"warehouse",2600);
+B("Depósito Berazategui Norte",-34.758,-58.225,"warehouse",2100);
+B("Distribuidora Florencio V.",-34.815,-58.278,"warehouse",3400);
+B("Centro Logístico Brown",-34.825,-58.408,"warehouse",2300);
+B("Depósito Gerli Norte",-34.688,-58.372,"warehouse",1500);
+B("Almacén Banfield Sur",-34.752,-58.398,"warehouse",2000);
+B("Logística Echeverría SA",-34.842,-58.465,"warehouse",3700);
+B("Depósito Ranelagh",-34.792,-58.235,"warehouse",1800);
+B("Distribuidora Ezpeleta",-34.752,-58.235,"warehouse",2200);
+B("Centro Logístico Lanús Este",-34.715,-58.378,"warehouse",2900);
+B("Depósito Industrial Varela",-34.805,-58.295,"warehouse",3500);
+B("Almacén Sur Express",-34.868,-58.518,"warehouse",2400);
+B("Logística Nacional Quilmes",-34.735,-58.265,"warehouse",3100);
+B("Depósito Adrogué Centro",-34.798,-58.402,"warehouse",1700);
+B("Distribuidora del Oeste",-34.838,-58.528,"warehouse",2600);
+B("Centro de Acopio Ezeiza",-34.888,-58.535,"warehouse",4000);
+B("Depósito San Francisco Solano",-34.778,-58.315,"warehouse",2800);
+B("Almacén Quilmes Oeste",-34.748,-58.285,"warehouse",2200);
+B("Logística Integral Sur",-34.862,-58.485,"warehouse",3300);
+B("Depósito Longchamps",-34.838,-58.388,"warehouse",1900);
+B("Distribuidora Sarandí Norte",-34.678,-58.348,"warehouse",2500);
+B("Centro Logístico Sur Total",-34.852,-58.512,"warehouse",4300);
+B("Depósito El Jagüel",-34.848,-58.445,"warehouse",1600);
+B("Almacén Industrial Wilde",-34.695,-58.332,"warehouse",2000);
+B("Logística Banfield Norte",-34.738,-58.395,"warehouse",2700);
+B("Depósito Avellaneda Sur",-34.675,-58.362,"warehouse",3200);
+B("Distribuidora Bosques",-34.828,-58.332,"warehouse",1400);
+B("Centro Logístico Ministro Rivadavia",-34.842,-58.378,"warehouse",2500);
+B("Depósito Industrial Calzada",-34.802,-58.365,"warehouse",3000);
+B("Almacén Rafael Calzada",-34.808,-58.358,"warehouse",1800);
+
+// ── COMMERCIAL (60) ──
+B("Centro Comercial Lomas",-34.762,-58.448,"commercial",1800);
+B("Oficinas del Sur SA",-34.708,-58.392,"commercial",1200);
+B("Torre Empresarial Quilmes",-34.725,-58.255,"commercial",2800);
+B("Centro de Negocios Avellaneda",-34.668,-58.352,"commercial",2200);
+B("Complejo Empresarial Lanús",-34.702,-58.388,"commercial",1600);
+B("Oficinas Banfield Centro",-34.742,-58.395,"commercial",800);
+B("Centro Profesional Adrogué",-34.798,-58.398,"commercial",950);
+B("Torre Comercial Temperley",-34.775,-58.388,"commercial",1400);
+B("Oficinas Bernal",-34.712,-58.278,"commercial",700);
+B("Centro Empresarial Brown",-34.815,-58.408,"commercial",2400);
+B("Complejo de Oficinas Sur",-34.845,-58.478,"commercial",1100);
+B("Torre Quilmes Centro",-34.728,-58.248,"commercial",3000);
+B("Centro de Negocios Lomas",-34.758,-58.442,"commercial",1800);
+B("Oficinas Monte Grande",-34.832,-58.468,"commercial",900);
+B("Complejo Comercial Wilde",-34.695,-58.328,"commercial",1500);
+B("Torre Empresarial Avellaneda",-34.662,-58.358,"commercial",2600);
+B("Centro Profesional Lanús",-34.715,-58.402,"commercial",1000);
+B("Oficinas Berazategui",-34.762,-58.215,"commercial",1200);
+B("Complejo de Negocios Ezeiza",-34.868,-58.535,"commercial",2000);
+B("Centro Comercial Burzaco",-34.828,-58.395,"commercial",1400);
+B("Torre del Plata",-34.688,-58.345,"commercial",2200);
+B("Oficinas Florencio Varela",-34.808,-58.282,"commercial",850);
+B("Centro Empresarial Echeverría",-34.838,-58.458,"commercial",1600);
+B("Complejo Profesional Quilmes",-34.735,-58.262,"commercial",1100);
+B("Torre Comercial Lanús",-34.698,-58.378,"commercial",2500);
+B("Centro de Oficinas Lomas",-34.768,-58.452,"commercial",900);
+B("Oficinas Sarandí",-34.682,-58.338,"commercial",650);
+B("Complejo Comercial Banfield",-34.745,-58.392,"commercial",1800);
+B("Centro Empresarial Glew",-34.822,-58.372,"commercial",750);
+B("Torre de Negocios Sur",-34.852,-58.495,"commercial",2000);
+B("Oficinas Claypole",-34.805,-58.338,"commercial",500);
+B("Centro Comercial Solano",-34.782,-58.312,"commercial",1300);
+B("Complejo Empresarial Ezpeleta",-34.755,-58.232,"commercial",700);
+B("Torre Avellaneda Centro",-34.672,-58.348,"commercial",2800);
+B("Oficinas Dock Sud",-34.665,-58.342,"commercial",600);
+B("Centro Profesional Quilmes O.",-34.745,-58.278,"commercial",1100);
+B("Complejo de Negocios Brown",-34.818,-58.412,"commercial",1500);
+B("Torre Sur SA",-34.842,-58.488,"commercial",2400);
+B("Oficinas Remedios de Escalada",-34.725,-58.405,"commercial",550);
+B("Centro Comercial Hudson",-34.785,-58.242,"commercial",1200);
+B("Complejo Empresarial Turdera",-34.765,-58.402,"commercial",800);
+B("Torre Comercial Berazategui",-34.768,-58.222,"commercial",1600);
+B("Oficinas Gerli",-34.692,-58.375,"commercial",450);
+B("Centro de Negocios Ranelagh",-34.792,-58.232,"commercial",700);
+B("Complejo Profesional Temperley",-34.772,-58.395,"commercial",950);
+B("Torre Empresarial Ezeiza",-34.878,-58.542,"commercial",2200);
+B("Oficinas Villa Domínico",-34.688,-58.332,"commercial",500);
+B("Centro Comercial Longchamps",-34.835,-58.385,"commercial",1400);
+B("Complejo de Oficinas Lanús O.",-34.708,-58.405,"commercial",1100);
+B("Torre del Sur",-34.858,-58.505,"commercial",1800);
+B("Oficinas Crucecita",-34.675,-58.362,"commercial",400);
+B("Centro Empresarial Ministro R.",-34.845,-58.375,"commercial",850);
+B("Complejo Comercial Varela",-34.812,-58.288,"commercial",1600);
+B("Torre Profesional Lomas",-34.755,-58.445,"commercial",2100);
+B("Oficinas Bosques",-34.825,-58.335,"commercial",600);
+B("Centro de Negocios Monte Grande",-34.832,-58.475,"commercial",1300);
+B("Complejo Sur SA",-34.848,-58.498,"commercial",900);
+B("Torre Comercial Brown",-34.812,-58.405,"commercial",2600);
+B("Oficinas El Jagüel",-34.852,-58.448,"commercial",500);
+B("Centro Empresarial Calzada",-34.805,-58.362,"commercial",750);
+
+// ── RETAIL (50) ──
+B("Supermercado Lomas",-34.760,-58.445,"retail",1200);
+B("Shopping del Sur",-34.708,-58.385,"retail",1800);
+B("Hipermercado Quilmes",-34.730,-58.260,"retail",2000);
+B("Centro Comercial Avellaneda",-34.670,-58.355,"retail",1500);
+B("Ferretería Industrial Lanús",-34.715,-58.398,"retail",400);
+B("Supermercado Banfield",-34.745,-58.398,"retail",900);
+B("Shopping Adrogué",-34.800,-58.400,"retail",1600);
+B("Autoservicio Temperley",-34.778,-58.390,"retail",350);
+B("Materiales del Sur",-34.855,-58.485,"retail",800);
+B("Shopping Quilmes Centro",-34.728,-58.250,"retail",1800);
+B("Supermercado Burzaco",-34.830,-58.398,"retail",700);
+B("Ferretería San José",-34.840,-58.480,"retail",300);
+B("Centro Retail Wilde",-34.698,-58.330,"retail",1100);
+B("Shopping Monte Grande",-34.835,-58.470,"retail",1400);
+B("Supermercado Berazategui",-34.765,-58.220,"retail",950);
+B("Autoservicio Sarandí",-34.685,-58.340,"retail",280);
+B("Materiales Brown",-34.818,-58.415,"retail",600);
+B("Shopping Ezeiza",-34.870,-58.540,"retail",1600);
+B("Supermercado Florencio Varela",-34.810,-58.285,"retail",850);
+B("Ferretería Echeverría",-34.828,-58.455,"retail",350);
+B("Centro Retail Lanús",-34.705,-58.395,"retail",1000);
+B("Shopping Lomas Centro",-34.755,-58.448,"retail",1700);
+B("Supermercado Glew",-34.825,-58.370,"retail",600);
+B("Autoservicio Gerli",-34.690,-58.378,"retail",250);
+B("Materiales Quilmes",-34.740,-58.270,"retail",500);
+B("Shopping Bernal",-34.710,-58.280,"retail",1300);
+B("Supermercado Claypole",-34.805,-58.340,"retail",550);
+B("Ferretería Lomas",-34.760,-58.450,"retail",200);
+B("Centro Retail Avellaneda",-34.665,-58.350,"retail",1400);
+B("Shopping Solano",-34.785,-58.310,"retail",800);
+B("Supermercado Dock Sud",-34.668,-58.345,"retail",450);
+B("Autoservicio Crucecita",-34.678,-58.358,"retail",180);
+B("Materiales Monte Grande",-34.838,-58.472,"retail",650);
+B("Shopping Hudson",-34.788,-58.248,"retail",1100);
+B("Supermercado Remedios",-34.725,-58.408,"retail",500);
+B("Ferretería Wilde",-34.700,-58.332,"retail",300);
+B("Centro Retail Temperley",-34.772,-58.392,"retail",750);
+B("Shopping Villa Domínico",-34.690,-58.335,"retail",900);
+B("Supermercado Longchamps",-34.840,-58.390,"retail",600);
+B("Autoservicio Ezpeleta",-34.758,-58.230,"retail",320);
+B("Materiales Banfield",-34.750,-58.400,"retail",450);
+B("Shopping Ranelagh",-34.795,-58.235,"retail",700);
+B("Supermercado Turdera",-34.768,-58.405,"retail",500);
+B("Ferretería Adrogué",-34.795,-58.395,"retail",250);
+B("Centro Retail Brown",-34.815,-58.410,"retail",1200);
+B("Shopping Bosques",-34.828,-58.330,"retail",650);
+B("Supermercado El Jagüel",-34.850,-58.450,"retail",400);
+B("Autoservicio Ministro R.",-34.845,-58.380,"retail",280);
+B("Materiales Calzada",-34.808,-58.360,"retail",350);
+B("Shopping Sur Total",-34.862,-58.515,"retail",1500);
+
+// ── FOOD PROCESSING (40) ──
+B("Frigorífico del Sur",-34.868,-58.495,"food_processing",4200);
+B("Panadería Industrial Lanús",-34.710,-58.395,"food_processing",1800);
+B("Lácteos Quilmes SA",-34.735,-58.270,"food_processing",3500);
+B("Frigorífico Avellaneda",-34.670,-58.360,"food_processing",5000);
+B("Procesadora de Alimentos Sur",-34.755,-58.440,"food_processing",2800);
+B("Molino del Plata",-34.698,-58.375,"food_processing",3200);
+B("Frigorífico Brown",-34.815,-58.405,"food_processing",4500);
+B("Fábrica de Pastas del Sur",-34.840,-58.478,"food_processing",1200);
+B("Procesadora de Carnes Quilmes",-34.742,-58.265,"food_processing",3800);
+B("Lácteos del Sur SA",-34.788,-58.452,"food_processing",2600);
+B("Frigorífico Ezeiza",-34.878,-58.538,"food_processing",4800);
+B("Elaboradora de Embutidos",-34.722,-58.398,"food_processing",1500);
+B("Aceitera del Sur",-34.812,-58.388,"food_processing",3400);
+B("Frigorífico Temperley",-34.775,-58.388,"food_processing",2200);
+B("Procesadora de Granos SA",-34.862,-58.518,"food_processing",4000);
+B("Fábrica de Galletitas Sur",-34.745,-58.395,"food_processing",2000);
+B("Frigorífico Berazategui",-34.768,-58.222,"food_processing",3600);
+B("Envasadora del Plata",-34.705,-58.388,"food_processing",1800);
+B("Procesadora de Frutas Sur",-34.832,-58.462,"food_processing",2400);
+B("Frigorífico Monte Grande",-34.838,-58.472,"food_processing",3000);
+B("Panificadora Industrial SA",-34.762,-58.445,"food_processing",1600);
+B("Frigorífico Wilde",-34.695,-58.330,"food_processing",2800);
+B("Procesadora Avícola Sur",-34.848,-58.502,"food_processing",3500);
+B("Lácteos Banfield",-34.748,-58.392,"food_processing",1400);
+B("Frigorífico Solano",-34.782,-58.308,"food_processing",2600);
+B("Elaboradora de Chacinados",-34.825,-58.408,"food_processing",1200);
+B("Procesadora de Pescados Sur",-34.672,-58.348,"food_processing",2000);
+B("Frigorífico Florencio Varela",-34.808,-58.282,"food_processing",3800);
+B("Bodega Industrial del Sur",-34.855,-58.488,"food_processing",1800);
+B("Procesadora de Alimentos GBA",-34.718,-58.402,"food_processing",2600);
+B("Frigorífico Echeverría",-34.835,-58.458,"food_processing",3200);
+B("Fábrica de Conservas Sur",-34.795,-58.368,"food_processing",1500);
+B("Procesadora de Cereales SA",-34.875,-58.525,"food_processing",4200);
+B("Frigorífico Glew",-34.822,-58.368,"food_processing",2800);
+B("Lácteos Echeverría SA",-34.842,-58.448,"food_processing",2000);
+B("Procesadora Cárnica Brown",-34.818,-58.395,"food_processing",3400);
+B("Frigorífico Sarandí",-34.685,-58.342,"food_processing",2400);
+B("Elaboradora de Dulces Sur",-34.738,-58.412,"food_processing",900);
+B("Frigorífico Lanús Sur",-34.712,-58.408,"food_processing",3100);
+B("Procesadora de Soja del Sur",-34.892,-58.498,"food_processing",4600);
+
+// ── HOTELS (40) ──
+B("Hotel Lomas de Zamora",-34.762,-58.448,"hotel",1200);
+B("Apart Hotel Sur",-34.708,-58.392,"hotel",600);
+B("Hotel Quilmes Centro",-34.728,-58.252,"hotel",1400);
+B("Hotel Avellaneda",-34.668,-58.355,"hotel",900);
+B("Apart Hotel Lanús",-34.705,-58.385,"hotel",500);
+B("Hotel Adrogué Palace",-34.798,-58.398,"hotel",1800);
+B("Hotel Temperley",-34.775,-58.388,"hotel",700);
+B("Apart Hotel Banfield",-34.745,-58.395,"hotel",450);
+B("Hotel del Sur",-34.855,-58.485,"hotel",1000);
+B("Hotel Ezeiza Aeropuerto",-34.870,-58.540,"hotel",2000);
+B("Apart Hotel Berazategui",-34.765,-58.218,"hotel",550);
+B("Hotel Monte Grande",-34.835,-58.470,"hotel",800);
+B("Hotel Brown Central",-34.815,-58.408,"hotel",1100);
+B("Apart Hotel Wilde",-34.698,-58.328,"hotel",400);
+B("Hotel Florencio Varela",-34.810,-58.285,"hotel",650);
+B("Hotel Bernal",-34.712,-58.278,"hotel",750);
+B("Apart Hotel Echeverría",-34.838,-58.458,"hotel",500);
+B("Hotel Burzaco",-34.828,-58.395,"hotel",600);
+B("Hotel del Plata Sur",-34.688,-58.345,"hotel",1600);
+B("Apart Hotel Glew",-34.822,-58.368,"hotel",350);
+B("Hotel Solano",-34.785,-58.312,"hotel",500);
+B("Hotel Claypole",-34.805,-58.338,"hotel",400);
+B("Apart Hotel Sarandí",-34.682,-58.338,"hotel",300);
+B("Hotel Gerli",-34.692,-58.378,"hotel",450);
+B("Hotel Dock Sud",-34.665,-58.342,"hotel",550);
+B("Apart Hotel Lomas Centro",-34.758,-58.442,"hotel",700);
+B("Hotel Villa Domínico",-34.688,-58.332,"hotel",500);
+B("Hotel Longchamps",-34.838,-58.388,"hotel",600);
+B("Apart Hotel Quilmes Oeste",-34.745,-58.278,"hotel",400);
+B("Hotel Hudson",-34.785,-58.245,"hotel",800);
+B("Hotel Ranelagh",-34.792,-58.232,"hotel",650);
+B("Apart Hotel Remedios",-34.725,-58.405,"hotel",350);
+B("Hotel Crucecita",-34.675,-58.358,"hotel",500);
+B("Hotel Ezpeleta",-34.755,-58.232,"hotel",400);
+B("Apart Hotel Monte Chingolo",-34.712,-58.358,"hotel",300);
+B("Hotel Turdera",-34.765,-58.402,"hotel",550);
+B("Hotel Ministro Rivadavia",-34.845,-58.378,"hotel",700);
+B("Apart Hotel Bosques",-34.828,-58.332,"hotel",350);
+B("Hotel El Jagüel",-34.850,-58.448,"hotel",450);
+B("Hotel Rafael Calzada",-34.808,-58.358,"hotel",500);
+
+// ── HEALTHCARE (30) ──
+B("Clínica del Sur",-34.762,-58.445,"healthcare",1200);
+B("Sanatorio Lanús",-34.708,-58.388,"healthcare",1500);
+B("Hospital Privado Quilmes",-34.725,-58.252,"healthcare",800);
+B("Clínica Avellaneda",-34.668,-58.352,"healthcare",1000);
+B("Sanatorio Adrogué",-34.798,-58.398,"healthcare",1400);
+B("Clínica Temperley",-34.775,-58.388,"healthcare",600);
+B("Centro Médico Banfield",-34.745,-58.395,"healthcare",700);
+B("Sanatorio Lomas de Zamora",-34.758,-58.448,"healthcare",1100);
+B("Clínica Monte Grande",-34.835,-58.468,"healthcare",500);
+B("Centro de Salud Brown",-34.815,-58.405,"healthcare",850);
+B("Sanatorio Quilmes",-34.732,-58.258,"healthcare",900);
+B("Clínica Berazategui",-34.762,-58.218,"healthcare",650);
+B("Centro Médico Ezeiza",-34.868,-58.535,"healthcare",500);
+B("Sanatorio Florencio Varela",-34.808,-58.282,"healthcare",750);
+B("Clínica Wilde",-34.695,-58.328,"healthcare",550);
+B("Centro de Salud Bernal",-34.712,-58.278,"healthcare",400);
+B("Sanatorio Burzaco",-34.828,-58.395,"healthcare",600);
+B("Clínica Echeverría",-34.838,-58.455,"healthcare",700);
+B("Centro Médico Sarandí",-34.682,-58.338,"healthcare",450);
+B("Sanatorio Glew",-34.822,-58.368,"healthcare",500);
+B("Clínica Solano",-34.782,-58.312,"healthcare",350);
+B("Centro de Salud Gerli",-34.692,-58.375,"healthcare",300);
+B("Sanatorio Dock Sud",-34.665,-58.342,"healthcare",550);
+B("Clínica Longchamps",-34.838,-58.388,"healthcare",400);
+B("Centro Médico Hudson",-34.785,-58.245,"healthcare",600);
+B("Sanatorio Claypole",-34.805,-58.338,"healthcare",450);
+B("Clínica Ranelagh",-34.792,-58.232,"healthcare",350);
+B("Centro de Salud Remedios",-34.725,-58.405,"healthcare",300);
+B("Sanatorio Turdera",-34.765,-58.402,"healthcare",500);
+B("Clínica Crucecita",-34.675,-58.358,"healthcare",400);
+
+// ── EDUCATION (30) ──
+B("Colegio del Sur",-34.762,-58.448,"education",1800);
+B("Universidad Tecnológica Lanús",-34.708,-58.392,"education",3000);
+B("Instituto Quilmes",-34.728,-58.255,"education",1400);
+B("Colegio Avellaneda",-34.670,-58.355,"education",1200);
+B("Universidad de Lomas",-34.755,-58.445,"education",2800);
+B("Instituto Privado Adrogué",-34.798,-58.398,"education",900);
+B("Colegio San José",-34.840,-58.478,"education",700);
+B("Escuela Técnica Banfield",-34.748,-58.398,"education",1100);
+B("Universidad del Sur",-34.855,-58.488,"education",2500);
+B("Instituto Temperley",-34.775,-58.388,"education",800);
+B("Colegio Brown",-34.815,-58.408,"education",1000);
+B("Escuela de Artes Quilmes",-34.735,-58.262,"education",600);
+B("Universidad Nacional Berazategui",-34.768,-58.218,"education",2200);
+B("Instituto Monte Grande",-34.835,-58.468,"education",750);
+B("Colegio Ezeiza",-34.868,-58.535,"education",950);
+B("Escuela Técnica Wilde",-34.698,-58.330,"education",850);
+B("Instituto Florencio Varela",-34.808,-58.282,"education",1100);
+B("Colegio Bernal",-34.712,-58.278,"education",800);
+B("Escuela Comercial Lanús",-34.705,-58.398,"education",650);
+B("Instituto Sarandí",-34.682,-58.340,"education",500);
+B("Colegio Burzaco",-34.828,-58.395,"education",900);
+B("Escuela Técnica Brown",-34.818,-58.412,"education",1200);
+B("Instituto Echeverría",-34.838,-58.455,"education",700);
+B("Colegio Glew",-34.822,-58.368,"education",600);
+B("Escuela Primaria Solano",-34.785,-58.310,"education",450);
+B("Instituto Gerli",-34.690,-58.375,"education",550);
+B("Colegio Dock Sud",-34.665,-58.345,"education",700);
+B("Escuela Técnica Quilmes",-34.742,-58.268,"education",1300);
+B("Instituto Hudson",-34.785,-58.245,"education",600);
+B("Colegio Claypole",-34.805,-58.338,"education",500);
+
+// ── MIXED / OTHER (50) ──
+B("Estación de Servicio Lomas",-34.760,-58.450,"other",350);
+B("Lavadero Industrial Sur",-34.708,-58.388,"other",500);
+B("Estacionamiento Quilmes",-34.730,-58.258,"other",800);
+B("Gimnasio del Sur",-34.670,-58.352,"other",400);
+B("Salón de Eventos Lanús",-34.705,-58.395,"other",600);
+B("Estación de Servicio Banfield",-34.748,-58.398,"other",300);
+B("Club Adrogué",-34.800,-58.400,"other",900);
+B("Lavadero Temperley",-34.778,-58.392,"other",250);
+B("Iglesia del Sur",-34.858,-58.490,"other",450);
+B("Estación de Servicio Ezeiza",-34.872,-58.542,"other",400);
+B("Gimnasio Berazategui",-34.765,-58.220,"other",350);
+B("Club Monte Grande",-34.835,-58.468,"other",1000);
+B("Salón de Eventos Brown",-34.818,-58.410,"other",700);
+B("Estación de Servicio Wilde",-34.698,-58.332,"other",300);
+B("Lavadero Florencio Varela",-34.810,-58.285,"other",200);
+B("Club Quilmes",-34.730,-58.250,"other",800);
+B("Gimnasio Lanús",-34.712,-58.400,"other",350);
+B("Estación de Servicio Sarandí",-34.685,-58.342,"other",280);
+B("Club Bernal",-34.715,-58.280,"other",700);
+B("Lavadero Avellaneda",-34.672,-58.355,"other",250);
+B("Salón de Fiestas Lomas",-34.762,-58.442,"other",550);
+B("Estación de Servicio Burzaco",-34.830,-58.398,"other",300);
+B("Gimnasio Echeverría",-34.840,-58.460,"other",400);
+B("Club Glew",-34.825,-58.372,"other",600);
+B("Lavadero Solano",-34.785,-58.315,"other",180);
+B("Estación de Servicio Gerli",-34.692,-58.378,"other",320);
+B("Club Dock Sud",-34.668,-58.345,"other",500);
+B("Gimnasio Longchamps",-34.838,-58.385,"other",300);
+B("Salón de Eventos Quilmes",-34.740,-58.268,"other",650);
+B("Estación de Servicio Hudson",-34.788,-58.248,"other",350);
+B("Lavadero Claypole",-34.808,-58.340,"other",200);
+B("Club Ranelagh",-34.795,-58.235,"other",700);
+B("Gimnasio Remedios",-34.728,-58.408,"other",280);
+B("Estación de Servicio Crucecita",-34.678,-58.358,"other",300);
+B("Salón de Fiestas Brown",-34.812,-58.405,"other",500);
+B("Lavadero Ezpeleta",-34.755,-58.232,"other",220);
+B("Club Villa Domínico",-34.690,-58.335,"other",600);
+B("Gimnasio Turdera",-34.768,-58.405,"other",300);
+B("Estación de Servicio Varela",-34.808,-58.288,"other",350);
+B("Club El Jagüel",-34.850,-58.450,"other",550);
+B("Lavadero Ministro R.",-34.845,-58.378,"other",180);
+B("Gimnasio Bosques",-34.825,-58.332,"other",320);
+B("Estación de Servicio Calzada",-34.805,-58.360,"other",300);
+B("Club Banfield",-34.742,-58.395,"other",800);
+B("Salón de Eventos Ezeiza",-34.875,-58.530,"other",600);
+B("Lavadero Monte Chingolo",-34.715,-58.360,"other",200);
+B("Gimnasio Sarandí",-34.680,-58.340,"other",350);
+B("Estación de Servicio Adrogué",-34.798,-58.402,"other",280);
+B("Club Echeverría",-34.832,-58.452,"other",750);
+B("Lavadero Lomas Centro",-34.758,-58.448,"other",250);
+B("Taller Mecánico Sur",-34.732,-58.418,"other",280);
+B("Depósito de Neumáticos",-34.718,-58.352,"other",420);
+B("Centro Cultural Quilmes",-34.738,-58.255,"other",550);
+B("Vivero del Sur",-34.845,-58.435,"other",380);
+B("Cooperativa Eléctrica Brown",-34.820,-58.395,"other",650);
+B("Taller Naval Dock Sud",-34.660,-58.348,"other",900);
+B("Centro de Reciclaje Sur",-34.872,-58.505,"other",720);
+B("Depósito de Materiales Quilmes",-34.750,-58.282,"other",580);
+
+// ═══════════════════════════════════════════
+// APP INIT
+// ═══════════════════════════════════════════
+const buildings = RAW;
+
+let currentFilter = {priority:'all',category:null,minSize:0,pipeline:false,search:''};
+let compareSet = new Set();
+let notes = {};
+let pipelineState = {};
+let map;
+
+try{
+  notes=JSON.parse(localStorage.getItem('sa_notes')||'{}');
+  pipelineState=JSON.parse(localStorage.getItem('sa_pipeline')||'{}');
+  buildings.forEach(b=>{if(pipelineState[b.id]!==undefined)b.pip=pipelineState[b.id]});
+}catch(e){}
+
+function initApp(){
+  map = new maplibregl.Map({
+    container:'map',
+    style:{
+      version:8,
+      glyphs:'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+      sources:{
+        'osm':{type:'raster',tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],tileSize:256,maxzoom:19,attribution:'© OpenStreetMap'}
+      },
+      layers:[{id:'osm-layer',type:'raster',source:'osm'}]
+    },
+    center:[-58.490818,-34.868172],
+    zoom:12,
+    maxZoom:19,
+    minZoom:9
+  });
+
+  map.on('load',()=>{
+    initMapLayers();
+    renderBuildings();
+    renderAnalytics();
+    updateHeaderStats();
+    document.getElementById('loading').classList.add('done');
+  });
+}
+
+let currentStyle='streets';
+function setMapStyle(style){
+  currentStyle=style;
+  document.getElementById('btn-streets').classList.toggle('active',style==='streets');
+  document.getElementById('btn-sat').classList.toggle('active',style==='satellite');
+  const tiles=style==='satellite'
+    ?['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}']
+    :['https://tile.openstreetmap.org/{z}/{x}/{y}.png'];
+  map.getSource('osm').tiles=tiles;
+  map.style.sourceCaches['osm'].clearTiles();
+  map.style.sourceCaches['osm'].update(map.transform);
+  map.triggerRepaint();
+}
+
+function resetView(){map.flyTo({center:[-58.490818,-34.868172],zoom:12})}
+
+function initMapLayers(){
+  const features=buildings.map(b=>({
+    type:'Feature',
+    geometry:{type:'Point',coordinates:[b.lo,b.la]},
+    properties:{id:b.id,pr:b.pr,kwp:b.kwp,pip:b.pip,a:b.a,n:b.n,c:b.c}
+  }));
+  map.addSource('buildings',{type:'geojson',data:{type:'FeatureCollection',features}});
+  map.addLayer({
+    id:'buildings-circles',type:'circle',source:'buildings',
+    filter:['==',['get','pip'],0],
+    paint:{
+      'circle-radius':['interpolate',['linear'],['zoom'],9,2,12,4,16,9],
+      'circle-color':['match',['get','pr'],'A','#D4A843','B','#2ED89A','C','#6496FF','#666666'],
+      'circle-opacity':0.85,
+      'circle-stroke-width':1,
+      'circle-stroke-color':'rgba(255,255,255,0.4)'
+    }
+  });
+  map.addLayer({
+    id:'buildings-pipeline',type:'circle',source:'buildings',
+    filter:['==',['get','pip'],1],
+    paint:{
+      'circle-radius':['interpolate',['linear'],['zoom'],9,3,12,6,16,11],
+      'circle-color':'#1A7A5A',
+      'circle-opacity':0.9,
+      'circle-stroke-width':2,
+      'circle-stroke-color':'#2ED89A'
+    }
+  });
+  map.on('click','buildings-circles',e=>showPopup(e));
+  map.on('click','buildings-pipeline',e=>showPopup(e));
+  map.on('mouseenter','buildings-circles',()=>{map.getCanvas().style.cursor='pointer'});
+  map.on('mouseleave','buildings-circles',()=>{map.getCanvas().style.cursor=''});
+  map.on('mouseenter','buildings-pipeline',()=>{map.getCanvas().style.cursor='pointer'});
+  map.on('mouseleave','buildings-pipeline',()=>{map.getCanvas().style.cursor=''});
+}
+
+function showPopup(e){
+  const f=e.features[0];
+  const bid=f.properties.id;
+  const b=buildings.find(x=>x.id===bid);
+  if(!b)return;
+  const waLink=`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Hola Solaris, vi "${b.n}" en el Roof Scanner. Me interesa una propuesta solar.`)}`;
+  const noteVal=notes[b.id]||'';
+  const isPip=b.pip?'active':'';
+  const html=`
+    <div class="popup-title">${b.n}</div>
+    <div class="popup-sub">${CAT_ICONS[b.c]||'📍'} ${CAT_LABELS[b.c]||b.c} · ${b.a.toLocaleString()} m² · Grado ${b.pr}</div>
+    <div class="popup-grid">
+      <div><div class="pg-label">Sistema</div><div class="pg-val">${b.kwp} kWp</div></div>
+      <div><div class="pg-label">Paneles</div><div class="pg-val">${Math.round(b.kwp/0.55)}</div></div>
+      <div><div class="pg-label">Generación anual</div><div class="pg-val">${b.ann.toLocaleString()} kWh</div></div>
+      <div><div class="pg-label">Ahorro anual</div><div class="pg-val">US$${b.sav.toLocaleString()}</div></div>
+      <div><div class="pg-label">Inversión</div><div class="pg-val">US$${b.inv.toLocaleString()}</div></div>
+      <div><div class="pg-label">Retorno</div><div class="pg-val">${b.pay} años</div></div>
+    </div>
+    <div class="popup-btns">
+      <a class="wa-btn" href="${waLink}" target="_blank">📱 WhatsApp</a>
+      <button class="proposal-btn" onclick="generateProposal(${b.id})">📄 Solicitar Propuesta</button>
+    </div>
+    <div class="popup-btns" style="margin-top:6px">
+      <button class="pip-toggle-btn ${isPip}" onclick="togglePipeline(${b.id},this)">🟢 ${b.pip?'En Pipeline':'Agregar al Pipeline'}</button>
+    </div>
+    <textarea class="note-area" placeholder="Agregar notas..." onchange="saveNote(${b.id},this.value)">${noteVal}</textarea>
+  `;
+  new maplibregl.Popup({maxWidth:'360px'}).setLngLat(e.lngLat).setHTML(html).addTo(map);
+}
+
+// ── Sidebar: Buildings ──
+function getFilteredBuildings(){
+  return buildings.filter(b=>{
+    if(currentFilter.priority!=='all'&&b.pr!==currentFilter.priority)return false;
+    if(currentFilter.category&&b.c!==currentFilter.category)return false;
+    if(b.a<currentFilter.minSize)return false;
+    if(currentFilter.pipeline&&!b.pip)return false;
+    if(currentFilter.search){
+      const q=currentFilter.search.toLowerCase();
+      if(!b.n.toLowerCase().includes(q)&&!b.c.toLowerCase().includes(q))return false;
+    }
+    return true;
+  });
+}
+
+function sortBuildings(list){
+  const s=document.getElementById('sortSelect').value;
+  return[...list].sort((a,b)=>{
+    if(s==='kwp')return b.kwp-a.kwp;
+    if(s==='area')return b.a-a.a;
+    if(s==='savings')return b.sav-a.sav;
+    if(s==='payback')return a.pay-b.pay;
+    if(s==='name')return a.n.localeCompare(b.n);
+    return 0;
+  });
+}
+
+function renderBuildings(){
+  const filtered=sortBuildings(getFilteredBuildings());
+  updateMapFilter(filtered);
+  const show=filtered.slice(0,200);
+  const container=document.getElementById('buildingList');
+  container.innerHTML=`<div style="padding:8px 12px;font-size:11px;opacity:0.5">${filtered.length} edificios${filtered.length>200?' (mostrando primeros 200)':''}</div>`+
+    show.map(b=>{
+      const isC=compareSet.has(b.id);
+      return`<div class="bldg-card ${isC?'selected':''}" onclick="flyTo(${b.lo},${b.la},${b.id})" data-id="${b.id}">
+        <div class="bldg-top">
+          <div class="bldg-name">${b.n}</div>
+          <div class="bldg-badge badge-${b.pr}">${b.pr}</div>
+        </div>
+        <div class="bldg-meta">${CAT_ICONS[b.c]||'📍'} ${CAT_LABELS[b.c]||b.c} · ${b.a.toLocaleString()} m²</div>
+        <div class="bldg-stats">
+          <span>${b.kwp} kWp</span> ·
+          <span>US$${b.sav.toLocaleString()}/año</span>
+          ${b.pip?'<span style="color:var(--accent)"> · 🟢</span>':''}
+        </div>
+        <div class="bldg-actions">
+          <button onclick="event.stopPropagation();toggleCompare(${b.id})" ${isC?'style="border-color:var(--gold);color:var(--gold)"':''}>⚖️</button>
+          <button class="${b.pip?'pip-on':''}" onclick="event.stopPropagation();togglePipelineFromList(${b.id})">🟢</button>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+function updateMapFilter(filtered){
+  if(!map||!map.getLayer('buildings-circles'))return;
+  if(currentFilter.priority==='all'&&!currentFilter.category&&currentFilter.minSize===0&&!currentFilter.pipeline&&!currentFilter.search){
+    map.setFilter('buildings-circles',['==',['get','pip'],0]);
+    map.setFilter('buildings-pipeline',['==',['get','pip'],1]);
+  }else{
+    const ids=[...new Set(filtered.map(b=>b.id))];
+    map.setFilter('buildings-circles',['all',['==',['get','pip'],0],['in',['get','id'],['literal',ids]]]);
+    map.setFilter('buildings-pipeline',['all',['==',['get','pip'],1],['in',['get','id'],['literal',ids]]]);
+  }
+}
+
+function sortAndRender(){renderBuildings()}
+document.getElementById('searchInput').addEventListener('input',e=>{currentFilter.search=e.target.value;renderBuildings()});
+
+function filterPriority(pr,btn){
+  currentFilter.priority=pr;
+  document.querySelectorAll('.filters-bar [data-pr]').forEach(b=>b.classList.toggle('on',b.dataset.pr===pr));
+  renderBuildings();
+}
+function filterCat(cat,btn){
+  if(currentFilter.category===cat){currentFilter.category=null;btn.classList.remove('on')}
+  else{document.querySelectorAll('.filters-bar [data-cat]').forEach(b=>b.classList.remove('on'));currentFilter.category=cat;btn.classList.add('on')}
+  renderBuildings();
+}
+function filterSize(sz,btn){
+  if(currentFilter.minSize===sz){currentFilter.minSize=0;btn.classList.remove('on')}
+  else{document.querySelectorAll('.filters-bar [data-sz]').forEach(b=>b.classList.remove('on'));currentFilter.minSize=sz;btn.classList.add('on')}
+  renderBuildings();
+}
+function filterPipeline(btn){currentFilter.pipeline=!currentFilter.pipeline;btn.classList.toggle('on',currentFilter.pipeline);renderBuildings()}
+
+function flyTo(lng,lat,id){
+  map.flyTo({center:[lng,lat],zoom:17});
+  setTimeout(()=>{
+    const b=buildings.find(x=>x.id===id);
+    if(b)showPopup({features:[{properties:{id:b.id}}],lngLat:{lng:b.lo,lat:b.la}});
+  },500);
+}
+
+// ── Pipeline ──
+function togglePipeline(id,btn){
+  const b=buildings.find(x=>x.id===id);if(!b)return;
+  b.pip=b.pip?0:1;pipelineState[id]=b.pip;
+  localStorage.setItem('sa_pipeline',JSON.stringify(pipelineState));
+  if(btn){btn.classList.toggle('active',b.pip);btn.textContent=b.pip?'🟢 En Pipeline':'🟢 Agregar al Pipeline'}
+  refreshMapData();updateHeaderStats();
+}
+function togglePipelineFromList(id){
+  const b=buildings.find(x=>x.id===id);if(!b)return;
+  b.pip=b.pip?0:1;pipelineState[id]=b.pip;
+  localStorage.setItem('sa_pipeline',JSON.stringify(pipelineState));
+  refreshMapData();updateHeaderStats();renderBuildings();
+}
+function refreshMapData(){
+  const src=map.getSource('buildings');if(!src)return;
+  src.setData({type:'FeatureCollection',features:buildings.map(b=>({
+    type:'Feature',geometry:{type:'Point',coordinates:[b.lo,b.la]},
+    properties:{id:b.id,pr:b.pr,kwp:b.kwp,pip:b.pip,a:b.a,n:b.n,c:b.c}
+  }))});
+}
+
+// ── Notes ──
+function saveNote(id,val){notes[id]=val;localStorage.setItem('sa_notes',JSON.stringify(notes))}
+
+// ── Compare ──
+function toggleCompare(id){
+  if(compareSet.has(id))compareSet.delete(id);
+  else if(compareSet.size<3)compareSet.add(id);
+  document.getElementById('compareBar').classList.toggle('show',compareSet.size>0);
+  document.getElementById('cmpCount').textContent=compareSet.size;
+  renderBuildings();
+}
+function clearCompare(){compareSet.clear();document.getElementById('compareBar').classList.remove('show');renderBuildings()}
+function showCompare(){
+  if(compareSet.size<2)return;
+  const items=[...compareSet].map(id=>buildings.find(b=>b.id===id)).filter(Boolean);
+  document.getElementById('compareGrid').innerHTML=items.map(b=>`
+    <div class="compare-col">
+      <h4>${b.n}</h4>
+      <div class="cmp-row"><span class="cmp-label">Prioridad</span><span class="cmp-val">${b.pr}</span></div>
+      <div class="cmp-row"><span class="cmp-label">Categoría</span><span class="cmp-val">${CAT_LABELS[b.c]||b.c}</span></div>
+      <div class="cmp-row"><span class="cmp-label">Área</span><span class="cmp-val">${b.a.toLocaleString()} m²</span></div>
+      <div class="cmp-row"><span class="cmp-label">Sistema</span><span class="cmp-val">${b.kwp} kWp</span></div>
+      <div class="cmp-row"><span class="cmp-label">Paneles</span><span class="cmp-val">${Math.round(b.kwp/0.55)}</span></div>
+      <div class="cmp-row"><span class="cmp-label">Generación anual</span><span class="cmp-val">${b.ann.toLocaleString()} kWh</span></div>
+      <div class="cmp-row"><span class="cmp-label">Ahorro anual</span><span class="cmp-val">US$${b.sav.toLocaleString()}</span></div>
+      <div class="cmp-row"><span class="cmp-label">Inversión</span><span class="cmp-val">US$${b.inv.toLocaleString()}</span></div>
+      <div class="cmp-row"><span class="cmp-label">Retorno</span><span class="cmp-val">${b.pay} años</span></div>
+    </div>
+  `).join('');
+  document.getElementById('compareOverlay').classList.add('show');
+}
+function closeCompare(){document.getElementById('compareOverlay').classList.remove('show')}
+
+// ── Proposal ──
+function generateProposal(id){
+  const b=buildings.find(x=>x.id===id);if(!b)return;
+  const panels=Math.round(b.kwp/0.55);
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>Propuesta Solar — ${b.n}</title>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'DM Sans',Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;color:#333}
+    .header{text-align:center;margin-bottom:30px;border-bottom:3px solid #D4A843;padding-bottom:20px}
+    .logo-t{display:inline-block;width:44px;height:44px;background:#0B3D2E;border-radius:50%;text-align:center;line-height:44px;font-weight:800;font-size:14px;color:#D4A843;margin-bottom:8px}
+    h1{font-size:22px;color:#0B3D2E}h2{font-size:16px;color:#0B3D2E;margin:20px 0 10px;border-bottom:1px solid #ddd;padding-bottom:6px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin:10px 0}
+    .grid .label{font-size:12px;color:#888;text-transform:uppercase}.grid .val{font-size:15px;font-weight:600}
+    table{width:100%;border-collapse:collapse;margin:10px 0}th,td{padding:8px 12px;text-align:left;border-bottom:1px solid #eee}
+    th{background:#f5f5f5;font-size:12px;text-transform:uppercase;color:#888}
+    .cta{display:block;text-align:center;background:#0B3D2E;color:#D4A843;padding:14px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px;margin:30px 0}
+    .footer{text-align:center;font-size:11px;color:#888;margin-top:30px;border-top:1px solid #ddd;padding-top:15px}
+    @media print{.cta{display:none}}</style></head><body>
+    <div class="header"><div class="logo-t">SA</div><h1>Solaris Argentina — Propuesta Solar</h1><p style="color:#888;margin-top:4px">${new Date().toLocaleDateString('es-AR')}</p></div>
+    <h2>Datos del Inmueble</h2>
+    <div class="grid">
+      <div><div class="label">Inmueble</div><div class="val">${b.n}</div></div>
+      <div><div class="label">Categoría</div><div class="val">${CAT_LABELS[b.c]||b.c}</div></div>
+      <div><div class="label">Superficie de Techo</div><div class="val">${b.a.toLocaleString()} m²</div></div>
+      <div><div class="label">Grado de Prioridad</div><div class="val">${b.pr}</div></div>
+    </div>
+    <h2>Sistema Solar Propuesto</h2>
+    <div class="grid">
+      <div><div class="label">Potencia</div><div class="val">${b.kwp} kWp</div></div>
+      <div><div class="label">Paneles</div><div class="val">${panels} paneles</div></div>
+      <div><div class="label">Generación Anual</div><div class="val">${b.ann.toLocaleString()} kWh</div></div>
+      <div><div class="label">Ahorro Mensual</div><div class="val">US$${Math.round(b.sav/12).toLocaleString()}</div></div>
+      <div><div class="label">Ahorro Anual</div><div class="val">US$${b.sav.toLocaleString()}</div></div>
+      <div><div class="label">Retorno de Inversión</div><div class="val">${b.pay} años</div></div>
+    </div>
+    <h2>Inversión</h2>
+    <table><thead><tr><th>Concepto</th><th>Monto</th><th>Detalle</th></tr></thead><tbody>
+      <tr><td><strong>Sistema EPC (llave en mano)</strong></td><td>US$${b.inv.toLocaleString()}</td><td>US$${COST_PER_KWP}/kWp</td></tr>
+      <tr><td><strong>Ahorro anual estimado</strong></td><td>US$${b.sav.toLocaleString()}</td><td>Tarifa US$${TARIFF}/kWh</td></tr>
+      <tr><td><strong>Período de retorno</strong></td><td>${b.pay} años</td><td>Vida útil: 25+ años</td></tr>
+    </tbody></table>
+    <a class="cta" href="https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Hola Solaris, me interesa la propuesta solar para "${b.n}" (${b.kwp} kWp).`)}" target="_blank">📱 Contactar por WhatsApp</a>
+    <div class="footer">Solaris Argentina · Buenos Aires · Energía Propia<br>Generado por Roof Scanner Pro</div>
+    </body></html>`);
+}
+
+// ── Analytics ──
+function renderAnalytics(){
+  const totalKwp=buildings.reduce((s,b)=>s+b.kwp,0);
+  const totalSav=buildings.reduce((s,b)=>s+b.sav,0);
+  const totalInv=buildings.reduce((s,b)=>s+b.inv,0);
+  const pipCount=buildings.filter(b=>b.pip).length;
+  const prCounts={A:0,B:0,C:0,D:0};
+  buildings.forEach(b=>prCounts[b.pr]=(prCounts[b.pr]||0)+1);
+  const maxPr=Math.max(...Object.values(prCounts));
+  const catCounts={};
+  buildings.forEach(b=>catCounts[b.c]=(catCounts[b.c]||0)+1);
+  const catSorted=Object.entries(catCounts).sort((a,b)=>b[1]-a[1]);
+  const maxCat=catSorted.length?catSorted[0][1]:1;
+  const top10=[...buildings].sort((a,b)=>b.kwp-a.kwp).slice(0,10);
+
+  document.getElementById('analyticsContent').innerHTML=`
+    <h3>📊 Analíticas del Portafolio</h3>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="sv">${buildings.length}</div><div class="sl">Edificios</div></div>
+      <div class="stat-card"><div class="sv">${(totalKwp/1000).toFixed(1)}</div><div class="sl">MWp Potencial</div></div>
+      <div class="stat-card"><div class="sv">$${(totalInv/1000000).toFixed(1)}M</div><div class="sl">Valor EPC (USD)</div></div>
+      <div class="stat-card"><div class="sv">$${(totalSav/1000000).toFixed(2)}M</div><div class="sl">Ahorro Anual</div></div>
+      <div class="stat-card"><div class="sv">${Math.round(totalKwp*ANNUAL_KWH_PER_KWP*0.0005/1000)}K</div><div class="sl">Ton CO₂/año</div></div>
+      <div class="stat-card"><div class="sv">${pipCount}</div><div class="sl">Pipeline</div></div>
+    </div>
+    <div class="chart-section">
+      <h4>Distribución por Prioridad</h4>
+      ${['A','B','C','D'].map(pr=>`<div class="bar-row">
+        <div class="bar-label">Grado ${pr}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(prCounts[pr]/maxPr*100)}%;background:${PRIORITY_COLORS[pr]}">${prCounts[pr]}</div></div>
+        <div class="bar-count">${prCounts[pr]}</div>
+      </div>`).join('')}
+    </div>
+    <div class="chart-section">
+      <h4>Por Categoría</h4>
+      ${catSorted.map(([cat,cnt])=>`<div class="bar-row">
+        <div class="bar-label">${CAT_ICONS[cat]||'📍'} ${(CAT_LABELS[cat]||cat).replace(/^. /,'')}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(cnt/maxCat*100)}%;background:var(--gold)">${cnt}</div></div>
+        <div class="bar-count">${cnt}</div>
+      </div>`).join('')}
+    </div>
+    <div class="chart-section">
+      <h4>Top 10 por kWp</h4>
+      <ol class="top-list">${top10.map((b,i)=>`<li>
+        <span class="tl-rank">${i+1}</span>
+        <span class="tl-name">${b.n}</span>
+        <span class="tl-val">${b.kwp} kWp</span>
+      </li>`).join('')}</ol>
+    </div>
+  `;
+}
+
+// ── Tabs ──
+function switchTab(tab,btn){
+  document.querySelectorAll('.sidebar-tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-buildings').style.display=tab==='buildings'?'':'none';
+  document.getElementById('tab-analytics').style.display=tab==='analytics'?'':'none';
+}
+
+// ── Header Stats ──
+function updateHeaderStats(){
+  const totalKwp=buildings.reduce((s,b)=>s+b.kwp,0);
+  const totalInv=buildings.reduce((s,b)=>s+b.inv,0);
+  const pipCount=buildings.filter(b=>b.pip).length;
+  document.getElementById('h-buildings').textContent=buildings.length;
+  document.getElementById('h-mwp').textContent=(totalKwp/1000).toFixed(1);
+  document.getElementById('h-value').textContent=(totalInv/1000000).toFixed(1);
+  document.getElementById('h-pipeline').textContent=pipCount;
+}
+
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&!e.ctrlKey&&document.activeElement.tagName!=='INPUT'){e.preventDefault();document.getElementById('searchInput').focus()}
+  if(e.key==='Escape')closeCompare();
+});
+</script>
+</body>
+</html>
