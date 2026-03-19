@@ -19,7 +19,7 @@ Un sistema típico para una planta industrial como la suya se paga solo en 4-6 a
 
 Saludos,
 Kaniel Tordjman
-CEO — Solaris Argentina
+Presidente — Solaris Argentina
 k@kanielt.com | kanielt.com
 
 ---
