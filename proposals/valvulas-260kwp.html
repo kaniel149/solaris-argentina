@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta Solar 260 kWp — Industria Tec. de Válvulas S.A. | Solaris Argentina</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page{size:A4;margin:0;}
+  :root{--green:#0B3D2E;--gold:#D4A843;--pearl:#FEFDFB;--dark:#0A0A0A;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:#f5f5f5;color:#333;}
+
+  .page{width:210mm;min-height:297mm;margin:20px auto;background:var(--pearl);position:relative;box-shadow:0 4px 24px rgba(0,0,0,0.12);overflow:hidden;}
+
+  /* Cover */
+  .cover{background:linear-gradient(160deg,var(--dark) 0%,var(--green) 100%);color:var(--pearl);min-height:297mm;display:flex;flex-direction:column;justify-content:center;padding:60px;position:relative;}
+  .cover::before{content:'';position:absolute;top:0;right:0;width:50%;height:100%;background:linear-gradient(135deg,transparent,rgba(212,168,67,0.08));pointer-events:none;}
+  .cover::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:40%;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.3));pointer-events:none;}
+  .cover .brand{font-size:14px;color:var(--gold);letter-spacing:6px;font-weight:600;margin-bottom:8px;position:relative;z-index:1;}
+  .cover .brand-sub{font-size:11px;color:rgba(254,253,251,0.4);letter-spacing:4px;margin-bottom:50px;position:relative;z-index:1;}
+  .cover h1{font-family:'Playfair Display',serif;font-size:44px;line-height:1.15;margin-bottom:16px;position:relative;z-index:1;}
+  .cover .gold{color:var(--gold);}
+  .cover .subtitle{font-size:17px;opacity:0.7;margin-bottom:48px;line-height:1.7;position:relative;z-index:1;}
+  .cover .meta{font-size:12.5px;opacity:0.5;line-height:2.2;position:relative;z-index:1;}
+  .cover .badge{display:inline-block;padding:6px 18px;border:1px solid var(--gold);border-radius:20px;font-size:10px;color:var(--gold);letter-spacing:3px;margin-top:36px;position:relative;z-index:1;}
+  .cover .decorline{position:absolute;top:60px;right:60px;width:80px;height:3px;background:var(--gold);z-index:1;}
+
+  /* Content Pages */
+  .content-page{padding:36px 46px 50px;min-height:297mm;position:relative;}
+  .page-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:2px solid var(--gold);margin-bottom:24px;}
+  .page-header h2{font-family:'Playfair Display',serif;font-size:21px;color:var(--green);}
+  .page-header .page-brand{font-size:9px;color:var(--gold);letter-spacing:3px;font-weight:600;}
+
+  h3{font-family:'Playfair Display',serif;font-size:14.5px;color:var(--green);margin:20px 0 8px;padding-bottom:3px;border-bottom:1px solid #E5E7EB;}
+  h4.section{font-size:12px;color:var(--green);font-weight:700;margin:14px 0 6px;}
+  p{font-size:11px;line-height:1.75;margin-bottom:8px;}
+
+  table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:10.5px;}
+  th{background:var(--green);color:var(--pearl);padding:7px 10px;text-align:left;font-weight:600;font-size:9.5px;text-transform:uppercase;letter-spacing:0.8px;}
+  td{padding:6px 10px;border-bottom:1px solid #E5E7EB;}
+  tr:nth-child(even){background:rgba(11,61,46,0.03);}
+  .highlight-row{background:rgba(212,168,67,0.12) !important;font-weight:600;}
+  .green-row{background:rgba(11,61,46,0.08) !important;font-weight:600;}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 20px;}
+  .stat-box{text-align:center;padding:14px 6px;background:rgba(11,61,46,0.04);border-radius:8px;border:1px solid rgba(11,61,46,0.08);}
+  .stat-box .num{font-family:'Playfair Display',serif;font-size:22px;color:var(--green);font-weight:800;}
+  .stat-box .lab{font-size:8px;color:#888;margin-top:3px;text-transform:uppercase;letter-spacing:0.8px;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .info-card{background:#F9FAFB;border-radius:8px;padding:14px;border:1px solid #E5E7EB;}
+  .info-card h4{font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;}
+  .info-card ul{padding-left:14px;font-size:10px;color:#555;line-height:1.9;}
+
+  .gold-box{background:linear-gradient(135deg,var(--green),#1a6b4a);border-radius:10px;padding:16px 18px;color:var(--pearl);margin:12px 0;}
+  .gold-box h4{color:var(--gold);font-size:12px;margin-bottom:6px;}
+  .gold-box p,.gold-box li{color:rgba(254,253,251,0.85);font-size:10.5px;}
+  .gold-box ul{padding-left:14px;line-height:1.9;}
+
+  .composition-bar{height:28px;border-radius:6px;overflow:hidden;display:flex;margin:8px 0 14px;font-size:9px;font-weight:700;letter-spacing:0.5px;}
+  .comp-reducible{background:linear-gradient(90deg,#16A34A,#22C55E);color:white;display:flex;align-items:center;justify-content:center;}
+  .comp-fixed{background:#DC2626;color:white;display:flex;align-items:center;justify-content:center;}
+
+  .scenario-box{border:2px solid var(--green);border-radius:10px;padding:16px;margin:10px 0;position:relative;}
+  .scenario-box.primary{border-color:var(--gold);background:rgba(212,168,67,0.04);}
+  .scenario-label{position:absolute;top:-10px;left:16px;background:var(--pearl);padding:0 8px;font-size:10px;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase;}
+  .scenario-box.primary .scenario-label{color:var(--gold);}
+
+  .timeline{display:flex;gap:0;margin:12px 0;}
+  .phase{flex:1;padding:10px 8px;border-top:3px solid var(--gold);text-align:center;}
+  .phase h4{font-size:10px;color:var(--green);margin-bottom:2px;}
+  .phase .period{font-size:9px;color:var(--gold);font-weight:700;}
+  .phase .desc{font-size:8px;color:#888;margin-top:3px;}
+
+  .signature-block{margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .sig-area{padding-top:50px;border-top:1px solid #333;text-align:center;font-size:10.5px;color:#666;}
+
+  .page-footer{position:absolute;bottom:0;left:0;right:0;padding:8px 46px;display:flex;justify-content:space-between;font-size:7.5px;color:#999;border-top:1px solid #E5E7EB;background:var(--pearl);}
+  .page-footer .gold{color:var(--gold);letter-spacing:2px;font-weight:600;}
+
+  .disclaimer{font-size:8.5px;color:#999;line-height:1.6;margin-top:16px;padding-top:10px;border-top:1px solid #E5E7EB;}
+
+  .check{color:#16A34A;font-weight:700;}
+  .cross{color:#DC2626;}
+
+  .print-controls{position:fixed;bottom:20px;right:20px;display:flex;gap:8px;z-index:100;}
+  .print-btn{background:var(--gold);color:var(--dark);border:none;padding:12px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-family:'DM Sans';font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+
+  @media print{
+    .print-controls{display:none;}
+    body{background:white;}
+    .page{box-shadow:none;margin:0;page-break-after:always;}
+  }
+</style>
+</head>
+<body>
+
+<div class="print-controls">
+  <button class="print-btn" onclick="window.print()">Imprimir / PDF</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE 1: COVER                                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page cover">
+  <div class="decorline"></div>
+  <div class="brand">SOLARIS ARGENTINA</div>
+  <div class="brand-sub">ENERGÍA PROPIA</div>
+  <h1>Propuesta Solar<br><span class="gold">260 kWp</span></h1>
+  <div class="subtitle">
+    Industria Tec. de Válvulas S.A.<br>
+    Gral. Deheza 3146, Remedios de Escalada, Buenos Aires
+  </div>
+  <div class="meta">
+    Preparado para: Industria Tec. de Válvulas S.A.<br>
+    CUIT: 33-71489513-9<br>
+    Preparado por: Rubén Freidman — CEO, Solaris Argentina<br>
+    Fecha: Marzo 2026<br>
+    Referencia: SA-2026-002<br>
+    Validez: 30 días
+  </div>
+  <div class="badge">CONFIDENCIAL</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE 2: BILL ANALYSIS + EXECUTIVE SUMMARY              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-header">
+    <h2>Análisis de Factura y Resumen Ejecutivo</h2>
+    <div class="page-brand">SOLARIS ARGENTINA</div>
+  </div>
+
+  <p>Solaris Argentina presenta esta propuesta técnico-económica para la instalación de un sistema fotovoltaico de <strong>260 kWp</strong> en la planta industrial de <strong>Industria Tec. de Válvulas S.A.</strong>, conectada a la red Edesur bajo tarifa <strong>T3 MT (Industrial)</strong>. Tras analizar 6 meses de facturación, identificamos un perfil excepcionalmente favorable para generación solar distribuida.</p>
+
+  <h3>Composición de la Factura Mensual</h3>
+  <table>
+    <tr><th>Componente</th><th>ARS/mes</th><th>% Factura</th><th>Categoría</th></tr>
+    <tr><td>Energía Activa — Bloque Restantes</td><td>2,163,420</td><td>31.0%</td><td class="check">✅ REDUCIBLE</td></tr>
+    <tr><td>Demanda de Potencia Medida</td><td>2,048,720</td><td>29.4%</td><td class="check">✅ REDUCIBLE</td></tr>
+    <tr><td>Cargo de Transporte (variable)</td><td>438,500</td><td>6.3%</td><td class="check">✅ REDUCIBLE</td></tr>
+    <tr><td>Energía Reactiva</td><td>46,510</td><td>0.7%</td><td class="check">✅ REDUCIBLE</td></tr>
+    <tr><td>Impuestos sobre cargos variables</td><td>416,800</td><td>6.0%</td><td class="check">✅ REDUCIBLE</td></tr>
+    <tr class="highlight-row"><td><strong>Total Reducible con Solar</strong></td><td><strong>5,113,950</strong></td><td><strong>73.4%</strong></td><td></td></tr>
+    <tr><td>Capacidad Suministrada Contratada (CSC)</td><td>712,450</td><td>10.2%</td><td class="cross">FIJO*</td></tr>
+    <tr><td>Cargo fijo de conexión</td><td>285,600</td><td>4.1%</td><td class="cross">FIJO</td></tr>
+    <tr><td>Impuestos fijos + otros</td><td>856,641</td><td>12.3%</td><td class="cross">FIJO</td></tr>
+    <tr class="green-row"><td><strong>Total Fijo</strong></td><td><strong>1,854,691</strong></td><td><strong>26.6%</strong></td><td><em>*CSC reducible mes 7+</em></td></tr>
+    <tr class="highlight-row"><td><strong>FACTURA TOTAL NORMALIZADA</strong></td><td><strong>6,968,641</strong></td><td><strong>100%</strong></td><td></td></tr>
+  </table>
+
+  <div class="composition-bar">
+    <div class="comp-reducible" style="width:73.4%;">73.4% REDUCIBLE</div>
+    <div class="comp-fixed" style="width:26.6%;">26.6% FIJO</div>
+  </div>
+
+  <div class="gold-box">
+    <h4>Hallazgo Clave: T3 MT — Perfil Excepcional para Solar</h4>
+    <p>A diferencia de las tarifas T2 (con alta proporción de cargos fijos por capacidad), la tarifa T3 MT de Válvulas cobra <strong>el 29.4% de la factura por demanda de potencia medida</strong> — no contratada. Esto significa que el sistema solar reduce directamente este cargo al disminuir el pico de demanda de la red de 157 kW a ~55 kW. Combinado con el 31% en energía Restantes, <strong>el 73.4% de la factura es atacable con solar desde el Día 1</strong>.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-box"><div class="num">260</div><div class="lab">kWp Instalados</div></div>
+    <div class="stat-box"><div class="num">$250K</div><div class="lab">Inversión USD</div></div>
+    <div class="stat-box"><div class="num">4.2M</div><div class="lab">Ahorro ARS/mes</div></div>
+    <div class="stat-box"><div class="num">~60%</div><div class="lab">Reducción Día 1</div></div>
+  </div>
+
+  <h3>Alcance del Proyecto</h3>
+  <div class="two-col">
+    <div class="info-card">
+      <h4>Incluido</h4>
+      <ul>
+        <li>364 paneles Jinko 715W (Tier 1, N-type)</li>
+        <li>4 inversores Sineng SN50PT (50 kW c/u)</li>
+        <li>Estructuras coplanares completas</li>
+        <li>Sistema de monitoreo Sineng S-Dongle</li>
+        <li>Dispositivo de inyección cero</li>
+        <li>Materiales eléctricos completos</li>
+        <li>Montaje, instalación y puesta en marcha</li>
+        <li>Capacitación operativa O&M</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>No Incluido</h4>
+      <ul>
+        <li>Ingeniería de detalle</li>
+        <li>Trámites de Usuario Generador</li>
+        <li>Ingeniero Matriculado</li>
+        <li>Línea de vida (provisoria/definitiva)</li>
+        <li>Informe de seguridad e higiene</li>
+        <li>Obra civil no especificada</li>
+        <li>Transformadores, relés, medidores</li>
+        <li>Grúas o equipamiento especial</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>SA-2026-002 | Industria Tec. de Válvulas S.A.</span>
+    <span class="gold">ENERGÍA PROPIA</span>
+    <span>Página 2</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE 3: TECHNICAL SPECIFICATIONS                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-header">
+    <h2>Especificaciones Técnicas</h2>
+    <div class="page-brand">SOLARIS ARGENTINA</div>
+  </div>
+
+  <h3>Resumen del Sistema</h3>
+  <table>
+    <tr><th>Componente</th><th>Modelo</th><th>Cantidad</th><th>Especificación</th></tr>
+    <tr><td>Paneles solares</td><td>Jinko JKM715N-66HL5-BVD</td><td>364 unidades</td><td>715 Wp, bifacial, N-type TOPCon</td></tr>
+    <tr><td>Inversores</td><td>Sineng SN50PT</td><td>4 unidades</td><td>50 kW c/u, trifásico, 4 MPPT</td></tr>
+    <tr><td>Estructuras</td><td>Coplanares para techo industrial</td><td>364 unidades</td><td>Aluminio anodizado + acero inoxidable</td></tr>
+    <tr><td>Monitoreo</td><td>Sineng S-Dongle</td><td>1 unidad</td><td>WiFi/4G, monitoreo en tiempo real</td></tr>
+    <tr><td>Anti-inyección</td><td>Dispositivo de inyección cero</td><td>1 unidad</td><td>Previene exportación a red — crítico</td></tr>
+  </table>
+
+  <h3>Paneles — Jinko JKM715N-66HL5-BVD</h3>
+  <div class="two-col">
+    <div>
+      <table>
+        <tr><th colspan="2">Especificaciones Eléctricas</th></tr>
+        <tr><td>Potencia máxima (Pmax)</td><td><strong>715 Wp</strong></td></tr>
+        <tr><td>Eficiencia del módulo</td><td>22.26%</td></tr>
+        <tr><td>Voltaje circuito abierto (Voc)</td><td>46.33V</td></tr>
+        <tr><td>Corriente cortocircuito (Isc)</td><td>19.62A</td></tr>
+        <tr><td>Voltaje máximo del sistema</td><td>1,500V DC</td></tr>
+        <tr><td>Tipo de celda</td><td>N-type TOPCon monocristalina</td></tr>
+        <tr><td>Tecnología</td><td>HOT (Heat Optimized Technology)</td></tr>
+      </table>
+    </div>
+    <div>
+      <table>
+        <tr><th colspan="2">Garantías del Panel</th></tr>
+        <tr><td>Garantía del producto</td><td><strong>15 años</strong></td></tr>
+        <tr><td>Garantía de potencia lineal</td><td><strong>30 años</strong></td></tr>
+        <tr><td>Degradación año 1</td><td>2% máximo</td></tr>
+        <tr><td>Degradación anual (año 2-30)</td><td>0.4% por año</td></tr>
+        <tr><td>Potencia mínima año 30</td><td>87.40%</td></tr>
+        <tr><td>Certificación</td><td>Tier 1 Bloomberg BNEF</td></tr>
+        <tr><td>Fabricante</td><td>Jinko Solar (NYSE: JKS)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3>Inversores — Sineng SN50PT</h3>
+  <table>
+    <tr><th>Especificación</th><th>Valor</th></tr>
+    <tr><td>Potencia nominal AC</td><td>50 kW por unidad (200 kW total)</td></tr>
+    <tr><td>Eficiencia máxima</td><td>98.6%</td></tr>
+    <tr><td>MPPT trackers</td><td>4 por unidad</td></tr>
+    <tr><td>Rango MPPT</td><td>200–1,000V</td></tr>
+    <tr><td>Voltaje máximo DC</td><td>1,100V</td></tr>
+    <tr><td>Comunicación</td><td>RS485, WiFi, Ethernet</td></tr>
+    <tr><td>Protección</td><td>IP66, protección contra sobretensión tipo II</td></tr>
+    <tr><td>Garantía del producto</td><td><strong>5 años</strong> (extensible a 10 años)</td></tr>
+  </table>
+
+  <h3>Ratio DC/AC y Diseño de Potencia</h3>
+  <table>
+    <tr><th>Componente</th><th>Potencia</th></tr>
+    <tr><td>Potencia DC (paneles)</td><td>260.26 kWp (364 × 715 Wp)</td></tr>
+    <tr><td>Potencia AC (inversores)</td><td>200 kW (4 × 50 kW)</td></tr>
+    <tr class="highlight-row"><td>Ratio DC:AC</td><td><strong>1.30</strong> — óptimo</td></tr>
+  </table>
+  <p>El ratio DC:AC de 1.30 maximiza la generación anual al sobredimensionar los paneles respecto a los inversores. Los inversores operan a máxima capacidad durante más horas del día, aprovechando mejor las horas de menor irradiación (mañana temprano y tarde). El excedente en horas pico se recorta levemente (<2% de pérdida anual), resultando en un rendimiento superior neto.</p>
+
+  <div class="gold-box">
+    <h4>Dispositivo de Inyección Cero — ¿Por qué es Crítico?</h4>
+    <p>El dispositivo de inyección cero es un componente esencial de la estrategia de ahorro. Cumple dos funciones:</p>
+    <ul>
+      <li><strong>Cumplimiento regulatorio:</strong> Evita inyectar energía a la red sin habilitación como generador distribuido, simplificando trámites.</li>
+      <li><strong>Estrategia de capacidad contratada:</strong> Permite que la planta funcione exclusivamente con autoconsumo. Al reducir la demanda neta de red, el pico medido baja de 157 kW a ~55 kW. Después de 6 meses de medición reducida, Edesur permite reducir la capacidad contratada de 190 kW a 85 kW, generando un ahorro adicional de ~ARS 710,000/mes.</li>
+    </ul>
+  </div>
+
+  <h3>Verificación de Generación</h3>
+  <table>
+    <tr><th>Parámetro</th><th>Valor</th><th>Nota</th></tr>
+    <tr><td>Irradiación solar (Buenos Aires)</td><td>4.5 kWh/m²/día</td><td>Promedio anual</td></tr>
+    <tr><td>Performance Ratio</td><td>80%</td><td>Incluye temperatura, cableado, suciedad</td></tr>
+    <tr><td>Generación anual estimada</td><td><strong>341,640 kWh/año</strong></td><td>28,470 kWh/mes promedio</td></tr>
+    <tr><td>Consumo mensual referencia</td><td>33,552 kWh/mes</td><td>Consumo facturado</td></tr>
+    <tr><td>Consumo promedio 6 meses</td><td>29,328 kWh/mes</td><td>Media verificada</td></tr>
+    <tr class="highlight-row"><td>Cobertura bloque Restantes</td><td><strong>94.1%</strong></td><td>Generación vs. consumo diurno</td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>SA-2026-002 | Industria Tec. de Válvulas S.A.</span>
+    <span class="gold">ENERGÍA PROPIA</span>
+    <span>Página 3</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE 4: SAVINGS ANALYSIS (THE KEY PAGE)                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-header">
+    <h2>Análisis de Ahorro</h2>
+    <div class="page-brand">SOLARIS ARGENTINA</div>
+  </div>
+
+  <p>El sistema de 260 kWp genera ahorro a través de <strong>tres mecanismos simultáneos</strong>: reducción de energía consumida, reducción de demanda de potencia medida, y eliminación de penalización por energía reactiva. A partir del mes 7, un cuarto mecanismo se activa: reducción de la capacidad contratada.</p>
+
+  <!-- Scenario 1 -->
+  <div class="scenario-box">
+    <div class="scenario-label">Escenario 1 — Día 1: Sistema Online (CSC 190 kW)</div>
+    <table style="margin-top:8px;">
+      <tr><th>Concepto de Ahorro</th><th>ARS Neto/mes</th><th>Con Impuestos</th><th>% Factura</th></tr>
+      <tr><td>Energía Restantes (94.1% cobertura)</td><td>2,035,605</td><td>2,797,000</td><td>~40%</td></tr>
+      <tr><td>Demanda potencia medida (157→55 kW)</td><td>958,641</td><td>1,317,000</td><td>~19%</td></tr>
+      <tr><td>Energía reactiva (eliminada)</td><td>46,510</td><td>64,000</td><td>~1%</td></tr>
+      <tr class="highlight-row"><td><strong>TOTAL AHORRO DÍA 1</strong></td><td><strong>3,040,756</strong></td><td><strong>4,178,000</strong></td><td><strong>~60%</strong></td></tr>
+    </table>
+    <p style="font-size:10px;color:#666;margin-top:4px;">El ahorro en demanda de potencia es posible porque la tarifa T3 MT cobra por <em>potencia medida</em>, no contratada. El sistema solar reduce el pico neto de red de 157 kW a ~55 kW durante las horas de máxima demanda.</p>
+  </div>
+
+  <!-- Scenario 2 -->
+  <div class="scenario-box primary">
+    <div class="scenario-label">Escenario 2 — Mes 7+: Capacidad Contratada Reducida (190→85 kW)</div>
+    <table style="margin-top:8px;">
+      <tr><th>Concepto de Ahorro</th><th>ARS Neto/mes</th><th>Con Impuestos</th><th>% Factura</th></tr>
+      <tr><td>Ahorro base (escenario 1)</td><td>3,040,756</td><td>4,178,000</td><td>~60%</td></tr>
+      <tr style="background:rgba(212,168,67,0.15);">
+        <td><strong>+ Reducción Cap.Sum.Conv. (190→85 kW)</strong></td><td><strong>516,600</strong></td><td><strong>710,000</strong></td><td><strong>~10%</strong></td>
+      </tr>
+      <tr class="highlight-row"><td><strong>TOTAL AHORRO MES 7+</strong></td><td><strong>3,557,356</strong></td><td><strong>4,888,000</strong></td><td><strong>~70%</strong></td></tr>
+    </table>
+    <p style="font-size:10px;color:#666;margin-top:4px;">Después de 6 meses de operación con picos de red reducidos (~55 kW), Edesur permite reducir la capacidad suministrada contratada de 190 kW a 85 kW, eliminando un cargo fijo adicional significativo.</p>
+  </div>
+
+  <h3>Desglose Visual del Ahorro</h3>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="num" style="font-size:18px;">ARS 4.2M</div><div class="lab">Ahorro/mes Día 1</div></div>
+    <div class="stat-box"><div class="num" style="font-size:18px;">ARS 4.9M</div><div class="lab">Ahorro/mes Mes 7+</div></div>
+    <div class="stat-box"><div class="num" style="font-size:18px;">~60%</div><div class="lab">Reducción Día 1</div></div>
+    <div class="stat-box"><div class="num" style="font-size:18px;">~70%</div><div class="lab">Reducción Mes 7+</div></div>
+  </div>
+
+  <div class="gold-box">
+    <h4>¿Por qué Válvulas es un candidato excepcional para solar?</h4>
+    <ul>
+      <li><strong>73.4% de la factura es reducible</strong> — comparado con ~29% en tarifas T2 típicas. Esto se debe a que T3 MT cobra demanda de potencia <em>medida</em>, no fija.</li>
+      <li><strong>El pico de demanda coincide con la generación solar</strong> — el mayor consumo ocurre durante el día laboral, cuando el sistema genera a máxima capacidad.</li>
+      <li><strong>Doble estrategia</strong> — ahorro inmediato por energía + potencia, más ahorro estructural por reducción de CSC.</li>
+      <li><strong>Tamaño óptimo</strong> — 260 kWp cubre 94.1% del bloque Restantes sin sobredimensionar, maximizando el retorno por peso invertido.</li>
+    </ul>
+  </div>
+
+  <h3>Factura Proyectada Post-Solar</h3>
+  <table>
+    <tr><th>Concepto</th><th>Actual</th><th>Día 1</th><th>Mes 7+</th></tr>
+    <tr><td>Factura mensual total</td><td>ARS 6,968,641</td><td>ARS 2,791,000</td><td>ARS 2,081,000</td></tr>
+    <tr><td>Equivalente USD/mes</td><td>USD 5,807</td><td>USD 2,326</td><td>USD 1,734</td></tr>
+    <tr class="highlight-row"><td><strong>Ahorro mensual</strong></td><td>—</td><td><strong>ARS 4,178,000</strong></td><td><strong>ARS 4,888,000</strong></td></tr>
+  </table>
+
+  <div class="page-footer">
+    <span>SA-2026-002 | Industria Tec. de Válvulas S.A.</span>
+    <span class="gold">ENERGÍA PROPIA</span>
+    <span>Página 4</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE 5: ROI & PAYBACK                                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-header">
+    <h2>Retorno de Inversión</h2>
+    <div class="page-brand">SOLARIS ARGENTINA</div>
+  </div>
+
+  <h3>Inversión</h3>
+  <table>
+    <tr><th>Concepto</th><th>Valor</th></tr>
+    <tr><td>Sistema completo (equipos + instalación)</td><td><strong>USD 250,000</strong> (ex-IVA)</td></tr>
+    <tr><td>Precio por Wp instalado</td><td>USD 0.96/Wp</td></tr>
+    <tr><td>IVA (21%)</td><td>USD 52,500</td></tr>
+    <tr class="highlight-row"><td>Total con IVA</td><td><strong>USD 302,500</strong></td></tr>
+  </table>
+
+  <h3>Escenarios de Retorno</h3>
+  <table>
+    <tr><th>Escenario</th><th>Ahorro ARS/mes</th><th>Ahorro USD/mes</th><th>Ahorro USD/año</th><th>Payback</th></tr>
+    <tr><td>Tarifa actual — Día 1</td><td>4,178,000</td><td>3,482</td><td>41,780</td><td><strong>6.0 años</strong></td></tr>
+    <tr class="highlight-row"><td>Tarifa actual — Mes 7+</td><td>4,888,000</td><td>4,073</td><td>48,880</td><td><strong>5.1 años</strong></td></tr>
+    <tr><td>Tarifa +30% — Día 1</td><td>5,431,000</td><td>4,526</td><td>54,310</td><td><strong>4.6 años</strong></td></tr>
+    <tr class="highlight-row"><td>Tarifa +30% — Mes 7+</td><td>6,355,000</td><td>5,296</td><td>63,550</td><td><strong>3.9 años</strong></td></tr>
+  </table>
+  <p style="font-size:9.5px;color:#999;">Tipo de cambio referencia: 1 USD = ARS 1,200. Payback calculado sobre inversión ex-IVA (USD 250,000). IVA recuperable como crédito fiscal.</p>
+
+  <h3>Proyección Multi-Anual</h3>
+  <table>
+    <tr><th>Año</th><th>Ahorro Anual USD</th><th>Ahorro Acumulado USD</th><th>Inversión Neta Remanente</th><th>Nota</th></tr>
+    <tr><td>Año 1</td><td>45,330</td><td>45,330</td><td>204,670</td><td>6 meses Día 1 + 6 meses Mes 7+</td></tr>
+    <tr><td>Año 2</td><td>48,880</td><td>94,210</td><td>155,790</td><td>Tarifa actual estable</td></tr>
+    <tr><td>Año 3</td><td>53,770</td><td>147,980</td><td>102,020</td><td>+10% ajuste tarifario estimado</td></tr>
+    <tr class="highlight-row"><td>Año 5</td><td>~59,000</td><td>~262,000</td><td><strong>Recuperado</strong></td><td>Payback completo</td></tr>
+    <tr><td>Año 10</td><td>~68,000</td><td>~580,000</td><td>—</td><td>Ganancia neta acumulada</td></tr>
+    <tr><td>Año 25</td><td>~95,000</td><td>~1,800,000</td><td>—</td><td>Vida útil del sistema</td></tr>
+  </table>
+
+  <h3>Condiciones de Pago</h3>
+  <table>
+    <tr><th>Hito</th><th>Porcentaje</th><th>Monto USD</th><th>Momento</th></tr>
+    <tr><td>Anticipo</td><td>50%</td><td>125,000</td><td>Firma del contrato</td></tr>
+    <tr><td>Entrega de materiales</td><td>22%</td><td>55,000</td><td>Contra entrega de equipos en planta</td></tr>
+    <tr><td>Avance de instalación</td><td>25%</td><td>62,500</td><td>Avance de obra verificado</td></tr>
+    <tr><td>Puesta en marcha</td><td>3%</td><td>7,500</td><td>Contra PEM (commissioning)</td></tr>
+    <tr class="highlight-row"><td><strong>Total</strong></td><td><strong>100%</strong></td><td><strong>250,000</strong></td><td>+ IVA 21% en cada factura</td></tr>
+  </table>
+
+  <div class="gold-box">
+    <h4>Opción: Financiamiento vía Banco Comafi — EcoLeasing</h4>
+    <ul>
+      <li>Financiamiento hasta 100% del sistema</li>
+      <li>Plazo: 48–60 meses</li>
+      <li>Cuota mensual estimada: USD 4,200–5,100/mes (según plazo)</li>
+      <li><strong>Cash-flow positivo desde el mes 1:</strong> la cuota es menor que el ahorro mensual</li>
+      <li>Beneficios fiscales: deducción IVA + amortización acelerada</li>
+      <li>El sistema se paga solo mientras genera ahorro desde el primer día</li>
+    </ul>
+  </div>
+
+  <h3>Moneda y Ajuste de Precios</h3>
+  <p>Precios expresados en Dólares Estadounidenses (USD). La conversión a Pesos Argentinos se realizará según la cotización "tipo vendedor billete" del Banco de la Nación Argentina vigente al día de efectivo pago. En caso de cambios en la legislación tributaria posterior a esta propuesta, los precios podrán ser ajustados proporcionalmente.</p>
+
+  <div class="page-footer">
+    <span>SA-2026-002 | Industria Tec. de Válvulas S.A.</span>
+    <span class="gold">ENERGÍA PROPIA</span>
+    <span>Página 5</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PAGE 6: TIMELINE + WARRANTY + SIGNATURES               -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-header">
+    <h2>Cronograma, Garantías y Firma</h2>
+    <div class="page-brand">SOLARIS ARGENTINA</div>
+  </div>
+
+  <h3>Cronograma Estimado: 10–12 Semanas</h3>
+  <div class="timeline">
+    <div class="phase"><h4>Sem 1-2</h4><div class="period">Ingeniería</div><div class="desc">Diseño, PVsyst, planos eléctricos</div></div>
+    <div class="phase"><h4>Sem 3-4</h4><div class="period">Procurement</div><div class="desc">Pedido y recepción de equipos</div></div>
+    <div class="phase"><h4>Sem 5-8</h4><div class="period">Estructuras</div><div class="desc">Fabricación 30-45 días</div></div>
+    <div class="phase"><h4>Sem 8-10</h4><div class="period">Instalación</div><div class="desc">Montaje, cableado, conexión</div></div>
+    <div class="phase"><h4>Sem 11-12</h4><div class="period">PEM</div><div class="desc">Commissioning y capacitación</div></div>
+  </div>
+
+  <h3>Plazos de Entrega de Equipos</h3>
+  <table>
+    <tr><th>Equipo</th><th>Plazo</th><th>Nota</th></tr>
+    <tr><td>Paneles Jinko JKM715N</td><td>En stock</td><td>Sujeto a venta previa</td></tr>
+    <tr><td>Inversores Sineng SN50PT</td><td>En stock</td><td>Sujeto a venta previa</td></tr>
+    <tr><td>Estructuras coplanares</td><td>30–45 días</td><td>Desde aprobación de ingeniería</td></tr>
+    <tr><td>Dispositivo inyección cero</td><td>En stock</td><td>Configuración in situ</td></tr>
+    <tr><td>Materiales eléctricos</td><td>10–15 días</td><td>Cables, conectores, protecciones</td></tr>
+  </table>
+
+  <h3>Garantías</h3>
+  <table>
+    <tr><th>Componente</th><th>Garantía</th><th>Detalle</th></tr>
+    <tr><td>Paneles — producto</td><td><strong>15 años</strong></td><td>Defectos de fabricación (Jinko)</td></tr>
+    <tr><td>Paneles — potencia</td><td><strong>30 años</strong></td><td>87.40% mínimo al año 30 (0.4%/año)</td></tr>
+    <tr><td>Inversores</td><td><strong>5 años</strong></td><td>Extensible a 10 años (cotizar aparte)</td></tr>
+    <tr><td>Estructuras</td><td>10 años</td><td>Integridad estructural y anticorrosión</td></tr>
+    <tr><td>Mano de obra</td><td>2 años</td><td>Instalación eléctrica y mecánica</td></tr>
+  </table>
+
+  <h3>Próximos Pasos</h3>
+  <table>
+    <tr><th>#</th><th>Paso</th><th>Responsable</th></tr>
+    <tr><td>1</td><td>Visita técnica al sitio para relevamiento (sin costo)</td><td>Solaris Argentina</td></tr>
+    <tr><td>2</td><td>Estudio de sombras y análisis estructural del techo</td><td>Solaris Argentina</td></tr>
+    <tr><td>3</td><td>Diseño personalizado con simulación PVsyst</td><td>Solaris Argentina</td></tr>
+    <tr><td>4</td><td>Propuesta definitiva con ingeniería de detalle</td><td>Solaris Argentina</td></tr>
+    <tr><td>5</td><td>Firma de contrato EPC y anticipo (50%)</td><td>Ambas partes</td></tr>
+    <tr><td>6</td><td>Inicio de obras — semana 1 del cronograma</td><td>Solaris Argentina</td></tr>
+  </table>
+
+  <div class="signature-block">
+    <div class="sig-area">
+      <strong>Rubén Freidman</strong><br>
+      CEO — Solaris Argentina<br>
+      <br>
+      <span style="font-size:9px;color:#999;">
+        info@solarisargentina.com<br>
+        WhatsApp: +54 9 11 6816-4487<br>
+        www.solarisargentina.com
+      </span>
+    </div>
+    <div class="sig-area">
+      <strong>_________________________</strong><br>
+      Nombre y cargo<br>
+      Industria Tec. de Válvulas S.A.<br>
+      CUIT: 33-71489513-9
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    Esta propuesta es confidencial y está destinada exclusivamente al receptor indicado. Su contenido no constituye una oferta vinculante y está sujeta a la firma de un contrato EPC definitivo. Validez: 30 días desde la fecha de emisión. Los precios no incluyen IVA (21%) salvo indicación contraria. Precios sujetos a disponibilidad de stock al momento de la firma. Jurisdicción: Tribunales Ordinarios de la Ciudad Autónoma de Buenos Aires, República Argentina.
+  </div>
+
+  <div class="page-footer">
+    <span>SA-2026-002 | Industria Tec. de Válvulas S.A.</span>
+    <span class="gold">ENERGÍA PROPIA</span>
+    <span>Página 6</span>
+  </div>
+</div>
+
+</body>
+</html>
