@@ -73,6 +73,7 @@
 
 <div class="board" id="board"></div>
 
+<div style="text-align:center;margin:20px 0;"><button onclick="exportCSV()" style="background:var(--gold);color:var(--dark);border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-family:'DM Sans';font-size:13px;">📥 Exportar CSV</button></div>
 <div class="footer"><span class="gold">SOLARIS ARGENTINA</span> — Pipeline Tracker<br>Data stored locally in your browser</div>
 </div>
 
@@ -226,6 +227,17 @@ function deleteLead(){
   const id=parseInt(document.getElementById('editId').value);
   leads=leads.filter(l=>l.id!==id);
   save();render();closeModal();
+}
+
+function exportCSV(){
+  const headers=['ID','Empresa','Contacto','Email','Sector','Ubicación','kWp','Valor USD','Temperatura','Etapa','Notas'];
+  const rows=leads.map(l=>[l.id,l.company,l.contact,l.email,l.sector,l.location,l.size,l.value,l.temp,l.stage,l.notes||''].map(v=>'"'+(v+'').replace(/"/g,'""')+'"').join(','));
+  const csv=[headers.join(','),...rows].join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='solaris_pipeline_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
 }
 
 render();

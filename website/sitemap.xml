@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://solarisargentina.com/</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/website/index.html</loc><priority>1.0</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/en/landing-page.html</loc><priority>0.9</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/tools/roi-calculator.html</loc><priority>0.8</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/tools/financing-calculator.html</loc><priority>0.8</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/tools/bill-scanner.html</loc><priority>0.8</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/tools/solar-atlas.html</loc><priority>0.7</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/blog/energia-solar-empresas-argentina.html</loc><priority>0.7</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/blog/como-reducir-factura-electrica.html</loc><priority>0.7</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/blog/leasing-solar-banco-comafi.html</loc><priority>0.7</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/blog/monitoreo-solar-os.html</loc><priority>0.7</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/blog/ley-27191-generacion-distribuida.html</loc><priority>0.7</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/en/roi-calculator.html</loc><priority>0.6</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/en/financing-calculator.html</loc><priority>0.6</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/en/bill-scanner.html</loc><priority>0.6</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/en/solar-atlas.html</loc><priority>0.6</priority></url>
+  <url><loc>https://kaniel149.github.io/solaris-argentina/legal/terms-privacy.html</loc><priority>0.3</priority></url>
 </urlset>
