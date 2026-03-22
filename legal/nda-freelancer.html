@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acuerdo de Confidencialidad — Solaris Argentina</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+@page {
+  size: A4;
+  margin: 2.5cm 2.5cm 3cm 2.5cm;
+  @bottom-center {
+    content: counter(page) " de " counter(pages);
+    font-family: 'EB Garamond', serif;
+    font-size: 10pt;
+    color: #999;
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'EB Garamond', 'Times New Roman', Georgia, serif;
+  font-size: 12.5pt;
+  line-height: 1.75;
+  color: #1a1a1a;
+  background: #fff;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 60px 40px 40px;
+  counter-reset: page-counter;
+}
+
+h1 {
+  font-size: 16pt;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+  border-bottom: 2px solid #1a1a1a;
+  padding-bottom: 16px;
+  line-height: 1.4;
+}
+
+h2 {
+  font-size: 13pt;
+  font-weight: 700;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+p {
+  margin-bottom: 12px;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.preamble {
+  margin-bottom: 24px;
+}
+
+.blank {
+  border-bottom: 1px solid #666;
+  display: inline-block;
+  min-width: 180px;
+  color: #999;
+  font-style: italic;
+}
+
+.section {
+  margin-bottom: 20px;
+  page-break-inside: avoid;
+}
+
+.subsection {
+  margin-left: 24px;
+  margin-bottom: 8px;
+}
+
+.confidential-list {
+  margin-left: 24px;
+  margin-bottom: 12px;
+}
+
+.confidential-list li {
+  margin-bottom: 4px;
+  list-style-type: lower-roman;
+  padding-left: 4px;
+}
+
+.signature-block {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  page-break-inside: avoid;
+}
+
+.sig-party h3 {
+  font-size: 13pt;
+  font-weight: 700;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+}
+
+.sig-field {
+  margin-top: 12px;
+}
+
+.sig-field label {
+  font-size: 10pt;
+  color: #666;
+  display: block;
+}
+
+.sig-field .line {
+  border-bottom: 1px solid #1a1a1a;
+  min-height: 24px;
+  margin-top: 4px;
+}
+
+.page-number {
+  text-align: center;
+  font-size: 10pt;
+  color: #999;
+  margin-top: 40px;
+  page-break-before: auto;
+}
+
+.print-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  font-family: 'EB Garamond', serif;
+  font-size: 12pt;
+  cursor: pointer;
+  border-radius: 4px;
+  z-index: 100;
+  transition: background 0.2s;
+}
+
+.print-btn:hover {
+  background: #444;
+}
+
+@media print {
+  body { padding: 0; max-width: none; }
+  .print-btn { display: none; }
+  .page-number { display: none; }
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Imprimir</button>
+
+<h1>Acuerdo de Confidencialidad,<br>No Divulgación y No Competencia</h1>
+
+<div class="preamble">
+<p>EL PRESENTE ACUERDO DE CONFIDENCIALIDAD, NO DIVULGACIÓN Y NO COMPETENCIA (en adelante, el "<b>Acuerdo</b>") se celebra en la fecha <span class="blank">______________</span> (la "<b>Fecha de Vigencia</b>") entre:</p>
+
+<p><b>Solaris Argentina</b>, representada por <b>Rubén Freidman</b>, DNI <span class="blank">______________</span>, domiciliado en Buenos Aires, Argentina, con correo electrónico ruben@solaris-argentina.com (en adelante, "<b>Solaris Argentina</b>" o la "<b>Empresa</b>"),</p>
+
+<p>y</p>
+
+<p><span class="blank">______________</span>, DNI <span class="blank">______________</span>, con domicilio en <span class="blank">______________</span>, correo electrónico <span class="blank">______________</span> (en adelante, "<b>El Contratista</b>" o "<b>El Freelancer</b>").</p>
+
+<p>Solaris Argentina y El Contratista podrán ser denominados individualmente como la "<b>Parte</b>" y conjuntamente como las "<b>Partes</b>".</p>
+
+<p><b>CONSIDERANDO</b> que las Partes desean establecer una relación de colaboración comercial relacionada con la instalación de sistemas de energía solar, consultoría energética, y servicios afines en la República Argentina (la "<b>Colaboración</b>"), y que en el marco de dicha relación El Contratista tendrá acceso a información propietaria, herramientas, plataformas, bases de datos, materiales de capacitación y demás activos de Solaris Argentina;</p>
+
+<p><b>CONSIDERANDO</b> que Solaris Argentina ha invertido recursos sustanciales en el desarrollo de sus herramientas tecnológicas, metodologías, relaciones comerciales y propiedad intelectual, y que la protección de dichos activos es esencial para su operación;</p>
+
+<p><b>POR LO TANTO</b>, en consideración de las obligaciones mutuas aquí contenidas y de la contraprestación recibida, cuya suficiencia se reconoce, las Partes acuerdan lo siguiente:</p>
+</div>
+
+<!-- SECCIÓN 1 -->
+<div class="section">
+<h2>1. Información Confidencial</h2>
+
+<p>(a) A los efectos del presente Acuerdo, se entiende por "<b>Información Confidencial</b>" toda información, dato, material o conocimiento de carácter propietario de Solaris Argentina que no sea de dominio público, ya sea en formato tangible o intangible, cualquiera sea su soporte o medio de transmisión. La Información Confidencial incluye, sin limitación:</p>
+
+<ol class="confidential-list">
+<li>Bases de datos de prospectos y clientes, listados de leads, información de contacto de clientes actuales y potenciales;</li>
+<li>Estructuras de precios, márgenes de ganancia, modelos de costos y estrategias de fijación de precios;</li>
+<li>Acuerdos con proveedores, términos comerciales, contactos de proveedores y condiciones de compra;</li>
+<li>Metodologías de instalación, know-how técnico, procedimientos operativos y protocolos de trabajo;</li>
+<li>La plataforma de monitoreo <b>Solar OS</b>, incluyendo su código, funcionalidades, datos y arquitectura;</li>
+<li>Materiales de capacitación de la <b>Academia Solaris</b>, incluyendo contenido didáctico, videos, manuales y presentaciones;</li>
+<li>La herramienta de escaneo de techos (<b>Roof Scanner</b>) y su base de datos de edificios;</li>
+<li>El generador de propuestas comerciales y modelos financieros asociados;</li>
+<li>Metodologías de análisis de facturas de electricidad y modelos de ahorro;</li>
+<li>Todas las herramientas, plataformas y software propietario de Solaris Argentina;</li>
+<li>Pipelines de proyectos, oportunidades comerciales en curso y proyecciones de ventas;</li>
+<li>Alianzas bancarias y financieras, incluyendo relaciones con entidades como Banco Comafi u otras instituciones;</li>
+<li>Comunicaciones internas, estrategias comerciales, planes de negocios y de expansión;</li>
+<li>Cualquier información generada por El Contratista o sus representantes que contenga, refleje, se base en o derive de cualquiera de los elementos precedentes.</li>
+</ol>
+
+<p>La Información Confidencial no necesita ser novedosa, única, patentable, registrable o constituir un secreto comercial para ser considerada como tal bajo este Acuerdo.</p>
+
+<p>(b) <b>Exclusiones.</b> No obstante lo anterior, no se considerará Información Confidencial aquella que:</p>
+
+<p class="subsection">(i) se encontrara legítimamente en poder de El Contratista antes de su divulgación por parte de Solaris Argentina, según se acredite documentalmente;</p>
+
+<p class="subsection">(ii) sea recibida legítimamente de un tercero sin obligación de confidencialidad frente a Solaris Argentina;</p>
+
+<p class="subsection">(iii) se torne de dominio público sin mediar culpa o acción de El Contratista; o</p>
+
+<p class="subsection">(iv) deba ser divulgada en cumplimiento de una orden judicial o administrativa de autoridad competente, <i>siempre que</i> El Contratista notifique de inmediato y por escrito a Solaris Argentina antes de dicha divulgación y preste toda su colaboración razonable para obtener una medida de protección, y <i>siempre que</i> la divulgación se limite estrictamente a lo requerido por la autoridad.</p>
+</div>
+
+<!-- SECCIÓN 2 -->
+<div class="section">
+<h2>2. Obligaciones de Confidencialidad</h2>
+
+<p>El Contratista se obliga a:</p>
+
+<p class="subsection">(i) limitar la divulgación de toda Información Confidencial exclusivamente a aquellas personas que tengan una necesidad estricta de conocerla en relación directa con la Colaboración;</p>
+
+<p class="subsection">(ii) instruir a dichas personas sobre la naturaleza confidencial de la información y las obligaciones derivadas del presente Acuerdo, exigiendo su compromiso escrito de confidencialidad en términos no menos protectores que los aquí contenidos, asumiendo responsabilidad plena por sus actos u omisiones;</p>
+
+<p class="subsection">(iii) mantener la Información Confidencial en estricta reserva, protegiéndola con un nivel de cuidado no inferior al que emplea para proteger su propia información confidencial, y en ningún caso inferior a un estándar razonable de diligencia;</p>
+
+<p class="subsection">(iv) no divulgar Información Confidencial a tercero alguno, salvo autorización expresa y por escrito de Solaris Argentina; y</p>
+
+<p class="subsection">(v) no utilizar la Información Confidencial para ningún fin ajeno a la Colaboración, incluyendo pero sin limitarse a beneficio personal, desarrollo de negocios propios o de terceros, o cualquier actividad competitiva.</p>
+</div>
+
+<!-- SECCIÓN 3 -->
+<div class="section">
+<h2>3. Uso de la Información Confidencial</h2>
+
+<p>El Contratista se compromete a utilizar la Información Confidencial exclusivamente en el marco de la Colaboración y no para ningún otro propósito sin el consentimiento previo y por escrito de Solaris Argentina.</p>
+
+<p>El Contratista no deberá, directa ni indirectamente, intentar realizar ingeniería inversa, descompilar, desensamblar, descifrar, derivar, descubrir o identificar la composición, ideas subyacentes, algoritmos, estructura, procesos, métodos u otros elementos de la Información Confidencial.</p>
+
+<p>No se otorga a El Contratista ningún derecho ni licencia, expresa o implícita, sobre la Información Confidencial en virtud del presente Acuerdo. Todos los derechos, títulos e intereses sobre la Información Confidencial pertenecen exclusivamente a Solaris Argentina.</p>
+</div>
+
+<!-- SECCIÓN 4 — NO COMPETENCIA -->
+<div class="section">
+<h2>4. No Competencia</h2>
+
+<p>(a) Durante la vigencia de este Acuerdo y por un plazo de <b>dos (2) años</b> contados desde la expiración o terminación del mismo o de la Colaboración (lo que ocurra después), El Contratista no podrá, directa ni indirectamente, ya sea como titular, socio, accionista, director, empleado, consultor, agente, o en cualquier otra calidad:</p>
+
+<p class="subsection">(i) participar, establecer, gestionar, operar o intervenir en cualquier negocio que compita con la actividad de Solaris Argentina en materia de instalaciones de energía solar, consultoría energética, almacenamiento de energía o servicios relacionados, dentro del territorio de la <b>República Argentina</b>;</p>
+
+<p class="subsection">(ii) captar, desviar o intentar captar o desviar clientes, clientes potenciales u oportunidades comerciales de Solaris Argentina, con el fin de prestar servicios competitivos;</p>
+
+<p class="subsection">(iii) utilizar cualquier Información Confidencial, base de datos de clientes, leads, relaciones con proveedores, herramientas propietarias o plataformas de Solaris Argentina para establecer o promover cualquier negocio competitivo; ni</p>
+
+<p class="subsection">(iv) solicitar, contactar o aceptar negocios de clientes con los que haya trabajado durante la vigencia de la Colaboración, en relación con servicios que compitan con los de Solaris Argentina.</p>
+
+<p>(b) <b>Excepciones.</b> Las obligaciones de no competencia no aplicarán a:</p>
+
+<p class="subsection">(i) la titularidad pasiva de menos del cinco por ciento (5%) del capital accionario de una sociedad que cotice en bolsa;</p>
+
+<p class="subsection">(ii) actividades expresamente autorizadas por escrito por Solaris Argentina.</p>
+
+<p>(c) <b>Razonabilidad.</b> El Contratista reconoce que el alcance, duración y ámbito geográfico de las restricciones aquí establecidas son razonables y necesarios para proteger los legítimos intereses comerciales de Solaris Argentina, incluyendo su Información Confidencial, relaciones con clientes y fondo de comercio, y que dichas restricciones no le imponen una carga desproporcionada.</p>
+</div>
+
+<!-- SECCIÓN 5 — NO CAPTACIÓN -->
+<div class="section">
+<h2>5. No Captación de Personal y Proveedores</h2>
+
+<p>Durante la vigencia de este Acuerdo y por un plazo de <b>dos (2) años</b> contados desde su expiración o terminación, El Contratista no podrá, directa ni indirectamente:</p>
+
+<p class="subsection">(i) captar, reclutar, contratar o intentar captar, reclutar o contratar a cualquier empleado, contratista, consultor, freelancer o agente de Solaris Argentina, ni inducir a persona alguna a abandonar su relación con Solaris Argentina;</p>
+
+<p class="subsection">(ii) interferir, o intentar interferir, con la relación entre Solaris Argentina y cualquiera de sus empleados, contratistas, proveedores, socios, instituciones financieras u otras relaciones comerciales.</p>
+</div>
+
+<!-- SECCIÓN 6 — CESIÓN DE PROPIEDAD INTELECTUAL -->
+<div class="section">
+<h2>6. Cesión de Propiedad Intelectual</h2>
+
+<p>(a) Todo trabajo, herramienta, contenido, material, mejora, desarrollo, innovación, método, proceso, software, diseño, documento u obra de cualquier naturaleza que El Contratista cree, desarrolle, conciba o contribuya a crear durante la vigencia de la Colaboración y en relación con la misma, será propiedad exclusiva de Solaris Argentina desde el momento de su creación.</p>
+
+<p>(b) El Contratista cede irrevocablemente a Solaris Argentina todos los derechos de propiedad intelectual e industrial, incluyendo derechos de autor, patentes, marcas, modelos de utilidad, secretos comerciales y cualquier otro derecho sobre las creaciones mencionadas, tanto en la República Argentina como en el extranjero.</p>
+
+<p>(c) El Contratista se compromete a ejecutar toda la documentación y realizar todos los actos que Solaris Argentina razonablemente requiera para perfeccionar, registrar y proteger dichos derechos. En caso de que El Contratista no pueda o no quiera hacerlo, designa irrevocablemente a Solaris Argentina como su apoderado para tales fines.</p>
+
+<p>(d) Las modificaciones, mejoras o trabajos derivados realizados por El Contratista que se basen en o involucren la Información Confidencial o las herramientas de Solaris Argentina serán propiedad exclusiva de Solaris Argentina.</p>
+</div>
+
+<!-- SECCIÓN 7 — ACCESO A PLATAFORMAS -->
+<div class="section">
+<h2>7. Acceso a Plataformas y Herramientas</h2>
+
+<p>(a) Solaris Argentina podrá otorgar a El Contratista acceso a sus plataformas propietarias, incluyendo sin limitación: Solar OS, Roof Scanner, la Academia Solaris, el generador de propuestas, y demás herramientas tecnológicas (las "<b>Plataformas</b>").</p>
+
+<p>(b) Dicho acceso es personal, intransferible y revocable, otorgado exclusivamente para los fines de la Colaboración. El Contratista no podrá compartir credenciales de acceso con tercero alguno.</p>
+
+<p>(c) Al momento de la terminación de la Colaboración o del presente Acuerdo, por cualquier causa, El Contratista deberá:</p>
+
+<p class="subsection">(i) cesar inmediatamente todo uso de las Plataformas;</p>
+
+<p class="subsection">(ii) devolver o eliminar de forma permanente todas las credenciales, tokens de acceso, claves y cualquier otro medio de autenticación;</p>
+
+<p class="subsection">(iii) eliminar toda copia local de datos, materiales o contenido descargado de las Plataformas; y</p>
+
+<p class="subsection">(iv) certificar por escrito el cumplimiento de las obligaciones precedentes dentro de las <b>cuarenta y ocho (48) horas</b> siguientes a la terminación.</p>
+
+<p>(d) Solaris Argentina se reserva el derecho de revocar unilateralmente el acceso a las Plataformas en cualquier momento y sin necesidad de expresión de causa.</p>
+</div>
+
+<!-- SECCIÓN 8 — TRASPASO DE CLIENTES -->
+<div class="section">
+<h2>8. Traspaso de Clientes y Pipeline</h2>
+
+<p>Al momento de la terminación de la Colaboración o del presente Acuerdo, por cualquier causa, El Contratista deberá:</p>
+
+<p class="subsection">(i) transferir a Solaris Argentina la totalidad de las relaciones con clientes activos y potenciales que haya desarrollado o gestionado durante la Colaboración;</p>
+
+<p class="subsection">(ii) entregar toda la documentación, correspondencia, propuestas, cotizaciones y demás información relativa a dichos clientes;</p>
+
+<p class="subsection">(iii) entregar el pipeline completo de oportunidades comerciales en curso, incluyendo el estado de cada negociación;</p>
+
+<p class="subsection">(iv) facilitar una transición ordenada, presentando a los clientes al personal designado por Solaris Argentina; y</p>
+
+<p class="subsection">(v) abstenerse de comunicar a los clientes información que pueda perjudicar la relación comercial con Solaris Argentina.</p>
+
+<p>El Contratista reconoce que todas las relaciones con clientes generadas durante la Colaboración pertenecen a Solaris Argentina.</p>
+</div>
+
+<!-- SECCIÓN 9 — REDES SOCIALES -->
+<div class="section">
+<h2>9. Redes Sociales y Representación Pública</h2>
+
+<p>(a) Durante la vigencia de la Colaboración, El Contratista no realizará publicaciones, declaraciones ni comunicaciones en redes sociales o medios de comunicación en nombre de Solaris Argentina sin autorización previa y por escrito.</p>
+
+<p>(b) A partir de la terminación de la Colaboración, El Contratista deberá:</p>
+
+<p class="subsection">(i) cesar inmediatamente de presentarse como representante, agente, empleado o colaborador de Solaris Argentina en cualquier plataforma, red social o medio de comunicación;</p>
+
+<p class="subsection">(ii) eliminar de sus perfiles en redes sociales toda mención a Solaris Argentina como empleador, cliente o socio actual; y</p>
+
+<p class="subsection">(iii) abstenerse de utilizar el nombre, logotipo, marcas o identidad visual de Solaris Argentina en cualquier contexto que sugiera una relación vigente.</p>
+</div>
+
+<!-- SECCIÓN 10 — PLAZO -->
+<div class="section">
+<h2>10. Plazo</h2>
+
+<p>El presente Acuerdo tendrá vigencia por un plazo de <b>siete (7) años</b> contados desde la Fecha de Vigencia. Sin perjuicio de lo anterior, la obligación de El Contratista de mantener la confidencialidad de toda Información Confidencial divulgada durante la vigencia del Acuerdo subsistirá de manera indefinida con posterioridad a su expiración o terminación.</p>
+</div>
+
+<!-- SECCIÓN 11 — DEVOLUCIÓN -->
+<div class="section">
+<h2>11. Devolución de Información Confidencial</h2>
+
+<p>El Contratista deberá devolver de inmediato a Solaris Argentina todos los materiales tangibles e intangibles que contengan Información Confidencial, así como todas las notas, resúmenes, memorandos, análisis, documentos derivados y cualquier copia (incluyendo copias digitales), en el primero de los siguientes supuestos: (i) la finalización o terminación de la Colaboración; (ii) la terminación del presente Acuerdo; o (iii) el requerimiento escrito de Solaris Argentina.</p>
+
+<p>Alternativamente, con el consentimiento escrito de Solaris Argentina, El Contratista podrá destruir dichos materiales de manera inmediata y, a solicitud de la Empresa, deberá certificar dicha destrucción por escrito.</p>
+</div>
+
+<!-- SECCIÓN 12 — NOTIFICACIÓN DE INCUMPLIMIENTO -->
+<div class="section">
+<h2>12. Notificación de Incumplimiento</h2>
+
+<p>El Contratista deberá notificar a Solaris Argentina de manera inmediata ante el descubrimiento o la sospecha de: (i) cualquier uso, acceso o divulgación no autorizados de Información Confidencial; o (ii) cualquier acto u omisión incompatible con las obligaciones del presente Acuerdo. El Contratista cooperará plenamente con Solaris Argentina para recuperar la posesión de la Información Confidencial y prevenir cualquier uso, acceso o divulgación no autorizado adicional.</p>
+</div>
+
+<!-- SECCIÓN 13 — RECURSOS Y DAÑOS -->
+<div class="section">
+<h2>13. Recursos y Daños Liquidados</h2>
+
+<p>El Contratista reconoce que la divulgación o uso no autorizado de Información Confidencial, o el incumplimiento de las obligaciones de no competencia o no captación aquí establecidas, podría causar un daño irreparable y significativo a Solaris Argentina. En consecuencia, Solaris Argentina tendrá derecho a solicitar medidas cautelares y/o tutela judicial anticipada ante cualquier tribunal competente, sin necesidad de acreditar daño actual ni de prestar caución, además de cualquier otro recurso disponible en derecho.</p>
+
+<p>En caso de incumplimiento de las Secciones 4 (No Competencia), 5 (No Captación), 6 (Propiedad Intelectual), 7 (Acceso a Plataformas) u 8 (Traspaso de Clientes), la parte incumplidora deberá abonar a Solaris Argentina, en concepto de cláusula penal, la suma de <b>USD 50.000</b> (dólares estadounidenses cincuenta mil) por cada incumplimiento, sin perjuicio de los daños y perjuicios efectivamente sufridos. Las Partes acuerdan que dicho monto constituye una estimación razonable y anticipada de los daños probables.</p>
+</div>
+
+<!-- SECCIÓN 14 — LEY APLICABLE -->
+<div class="section">
+<h2>14. Ley Aplicable y Jurisdicción</h2>
+
+<p>El presente Acuerdo se regirá e interpretará de conformidad con las leyes de la <b>República Argentina</b>, sin consideración a sus normas de conflicto de leyes.</p>
+
+<p>Toda controversia, disputa o reclamo que surja del presente Acuerdo o se relacione con el mismo será sometida a la jurisdicción exclusiva de los <b>Tribunales Ordinarios de la Ciudad Autónoma de Buenos Aires</b>, renunciando las Partes a cualquier otro fuero o jurisdicción que pudiera corresponderles.</p>
+</div>
+
+<!-- SECCIÓN 15 — NOTIFICACIONES -->
+<div class="section">
+<h2>15. Notificaciones</h2>
+
+<p>Todas las notificaciones, solicitudes y demás comunicaciones en virtud del presente Acuerdo deberán efectuarse por escrito y se considerarán debidamente cursadas cuando sean entregadas personalmente, enviadas por correo certificado, o remitidas por correo electrónico con confirmación de recepción, a las siguientes direcciones:</p>
+
+<p class="subsection"><b>A Solaris Argentina:</b><br>
+Rubén Freidman<br>
+Buenos Aires, Argentina<br>
+Email: ruben@solaris-argentina.com</p>
+
+<p class="subsection"><b>A El Contratista:</b><br>
+<span class="blank">______________</span><br>
+<span class="blank">______________</span><br>
+Email: <span class="blank">______________</span></p>
+</div>
+
+<!-- SECCIÓN 16 — DISPOSICIONES GENERALES -->
+<div class="section">
+<h2>16. Disposiciones Generales</h2>
+
+<p>(a) <b>Cesión.</b> El presente Acuerdo no podrá ser cedido por El Contratista sin el consentimiento previo y por escrito de Solaris Argentina. Solaris Argentina podrá ceder el Acuerdo a cualquier entidad que suceda en todo o en parte su actividad comercial, siempre que dicha entidad asuma por escrito las obligaciones aquí contenidas.</p>
+
+<p>(b) <b>Modificación y Renuncia.</b> El presente Acuerdo no podrá ser modificado sino mediante instrumento escrito firmado por ambas Partes. La renuncia a un derecho derivado de un incumplimiento no constituirá renuncia respecto de cualquier otro incumplimiento.</p>
+
+<p>(c) <b>Acuerdo Integral.</b> El presente Acuerdo constituye el acuerdo completo entre las Partes respecto de su objeto y reemplaza todos los acuerdos, entendimientos y declaraciones anteriores o contemporáneos, orales o escritos, relativos al mismo.</p>
+
+<p>(d) <b>Separabilidad.</b> Si cualquier disposición del presente Acuerdo fuera declarada inválida, ilegal o inaplicable, las disposiciones restantes mantendrán plena vigencia y efecto. Si cualquier disposición de no competencia o no captación fuera considerada excesivamente amplia, el tribunal competente tendrá la facultad de reformarla en la medida máxima aplicable.</p>
+
+<p>(e) <b>Ejemplares.</b> El presente Acuerdo podrá ser firmado en múltiples ejemplares, cada uno de los cuales será considerado un original y todos los cuales en conjunto constituirán un solo instrumento. Las firmas electrónicas o escaneadas tendrán la misma validez legal que las firmas originales.</p>
+
+<p>(f) <b>Relación entre las Partes.</b> Nada en el presente Acuerdo creará una relación de dependencia laboral, sociedad, asociación, mandato irrevocable o relación fiduciaria entre las Partes. El Contratista actúa como profesional independiente y asume la totalidad de sus obligaciones fiscales y previsionales.</p>
+
+<p>(g) <b>Idioma.</b> El presente Acuerdo se otorga en idioma español. En caso de existir alguna traducción, prevalecerá la versión en español.</p>
+</div>
+
+<!-- BLOQUE DE FIRMAS -->
+<div class="signature-block">
+<div class="sig-party">
+<h3>Solaris Argentina</h3>
+<div class="sig-field">
+<label>Firma</label>
+<div class="line" style="min-height:50px"></div>
+</div>
+<div class="sig-field">
+<label>Nombre: Rubén Freidman</label>
+<div class="line"></div>
+</div>
+<div class="sig-field">
+<label>DNI</label>
+<div class="line"></div>
+</div>
+<div class="sig-field">
+<label>Domicilio</label>
+<div class="line"></div>
+</div>
+<div class="sig-field">
+<label>Fecha</label>
+<div class="line"></div>
+</div>
+</div>
+
+<div class="sig-party">
+<h3>El Contratista</h3>
+<div class="sig-field">
+<label>Firma</label>
+<div class="line" style="min-height:50px"></div>
+</div>
+<div class="sig-field">
+<label>Nombre completo</label>
+<div class="line"></div>
+</div>
+<div class="sig-field">
+<label>DNI</label>
+<div class="line"></div>
+</div>
+<div class="sig-field">
+<label>Domicilio</label>
+<div class="line"></div>
+</div>
+<div class="sig-field">
+<label>Fecha</label>
+<div class="line"></div>
+</div>
+</div>
+</div>
+
+<div class="page-number" style="margin-top: 40px; font-size: 10pt; color: #999; text-align: center;">
+— Fin del Acuerdo —
+</div>
+
+</body>
+</html>
